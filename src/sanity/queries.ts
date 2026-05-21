@@ -1,6 +1,4 @@
-import { groq } from "next-sanity";
-
-export const homepageQuery = groq`{
+export const homepageQuery = `{
   "settings": *[_type == "siteSettings"][0],
   "featuredStories": *[_type == "story" && featured == true] | order(publishedAt desc)[0...3] {
     _id,
