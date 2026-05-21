@@ -1,4 +1,9 @@
 import Link from "next/link";
+import { ContentCard } from "@/components/content-card";
+import { SectionIntro } from "@/components/section-intro";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+import { fallbackResources, fallbackStories } from "@/lib/content";
 import { getSanityClient } from "@/sanity/client";
 import { homepageQuery } from "@/sanity/queries";
 
@@ -34,37 +39,6 @@ type HomepageData = {
   dialogues?: Dialogue[];
 };
 
-const fallbackStories: StoryCard[] = [
-  {
-    _id: "family",
-    title: "Why emotional numbing feels normal in many African homes",
-    excerpt:
-      "A gentle look at silence, survival, and learning to feel again without shame.",
-    category: "Family & Silence"
-  },
-  {
-    _id: "burnout",
-    title: "Burnout is not laziness",
-    excerpt:
-      "For students, creators, and young professionals who are tired of performing strength.",
-    category: "School & Work"
-  },
-  {
-    _id: "men",
-    title: "Men need language for pain too",
-    excerpt:
-      "Honest reflections on masculinity, friendship, faith, and asking for help.",
-    category: "Men & Mental Health"
-  }
-];
-
-const fallbackResources: ResourceCard[] = [
-  { _id: "friend", title: "How to support a friend who is struggling" },
-  { _id: "parents", title: "Talking to African parents about mental health" },
-  { _id: "sadness", title: "When sadness becomes more than sadness" },
-  { _id: "shame", title: "Finding help without shame" }
-];
-
 async function getHomepageData(): Promise<HomepageData> {
   const client = getSanityClient();
 
@@ -78,10 +52,12 @@ async function getHomepageData(): Promise<HomepageData> {
 export default async function Home() {
   const data = await getHomepageData();
   const settings = data.settings;
-  const stories = data.featuredStories?.length
+  const stories: StoryCard[] = data.featuredStories?.length
     ? data.featuredStories
-    : fallbackStories;
-  const resources = data.resources?.length ? data.resources : fallbackResources;
+    : fallbackStories.slice(0, 3);
+  const resources: ResourceCard[] = data.resources?.length
+    ? data.resources
+    : fallbackResources;
   const featuredDialogue = data.dialogues?.[0];
   const stats = settings?.impactStats?.length
     ? settings.impactStats
@@ -102,22 +78,7 @@ export default async function Home() {
 
   return (
     <main>
-      <header className="site-header">
-        <Link className="brand" href="/">
-          <span className="brand-mark" />
-          <span>Behind the Reels</span>
-        </Link>
-        <nav className="nav-links" aria-label="Primary navigation">
-          <Link href="/stories">Stories</Link>
-          <Link href="/dialogues">Dialogues</Link>
-          <Link href="/outreach">Outreach</Link>
-          <Link href="/resources">Resources</Link>
-          <Link href="/about">About</Link>
-        </nav>
-        <Link className="button primary" href="/join">
-          Join the Community
-        </Link>
-      </header>
+      <SiteHeader />
 
       <section className="hero section">
         <div className="hero-copy">
@@ -168,15 +129,14 @@ export default async function Home() {
         />
         <div className="card-grid">
           {stories.map((story, index) => (
-            <article className="story-card" key={story._id}>
-              <div className={`card-image accent-${index + 1}`} />
-              <span className="tag">{story.category || "Story"}</span>
-              <h3>{story.title}</h3>
-              <p>{story.excerpt}</p>
-              <Link href={story.slug?.current ? `/stories/${story.slug.current}` : "/stories"}>
-                Read the story
-              </Link>
-            </article>
+            <ContentCard
+              accent={(index % 3) + 1}
+              excerpt={story.excerpt}
+              href={story.slug?.current ? `/stories/${story.slug.current}` : "/stories"}
+              key={story._id}
+              tag={story.category || "Story"}
+              title={story.title}
+            />
           ))}
         </div>
       </section>
@@ -232,7 +192,7 @@ export default async function Home() {
           {resources.map((resource) => (
             <article className="resource-card" key={resource._id}>
               <h3>{resource.title}</h3>
-              <p>{resource.excerpt || "Guide · 5 min read"}</p>
+              <p>{resource.excerpt || "Guide - 5 min read"}</p>
             </article>
           ))}
         </div>
@@ -254,44 +214,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <footer className="site-footer">
-        <div>
-          <strong>Behind the Reels</strong>
-          <p>Mental health storytelling, dialogues, and outreaches for young Africans.</p>
-        </div>
-        <nav aria-label="Footer navigation">
-          <Link href="/stories">Stories</Link>
-          <Link href="/dialogues">Dialogues</Link>
-          <Link href="/outreach">Outreach</Link>
-          <Link href="/resources">Resources</Link>
-        </nav>
-        <nav aria-label="Community links">
-          <Link href="/submit">Submit your story</Link>
-          <Link href="/partner">Partner with us</Link>
-          <Link href="/newsletter">Newsletter</Link>
-          <Link href="https://www.instagram.com/behindthereels.co/">Instagram</Link>
-        </nav>
-      </footer>
+      <SiteFooter />
     </main>
-  );
-}
-
-function SectionIntro({
-  kicker,
-  title,
-  body,
-  dark = false
-}: {
-  kicker: string;
-  title: string;
-  body: string;
-  dark?: boolean;
-}) {
-  return (
-    <div className={dark ? "section-intro dark" : "section-intro"}>
-      <p>{kicker}</p>
-      <h2>{title}</h2>
-      <span>{body}</span>
-    </div>
   );
 }
