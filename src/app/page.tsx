@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { client } from "@/sanity/client";
+import { getSanityClient } from "@/sanity/client";
 import { homepageQuery } from "@/sanity/queries";
 
 type StoryCard = {
@@ -66,7 +66,9 @@ const fallbackResources: ResourceCard[] = [
 ];
 
 async function getHomepageData(): Promise<HomepageData> {
-  if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+  const client = getSanityClient();
+
+  if (!client) {
     return {};
   }
 
