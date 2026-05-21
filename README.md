@@ -16,7 +16,8 @@ React/Next.js website for Behind the Reels, a mental health storytelling and com
 2. Add the Sanity project ID and dataset.
 3. Install dependencies with `npm install`.
 4. Run the site with `npm run dev`.
-5. Run Sanity Studio with `npm run sanity`.
+
+Sanity Studio will be added after the Sanity project is created. The frontend is already prepared to fetch from Sanity once the environment variables are set.
 
 ## Core Content Types
 
