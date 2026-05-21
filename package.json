@@ -1,0 +1,31 @@
+{
+  "name": "behind-the-reels",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "sanity": "sanity"
+  },
+  "dependencies": {
+    "@portabletext/react": "^3.2.4",
+    "@sanity/client": "^6.29.1",
+    "@sanity/image-url": "^1.1.0",
+    "next": "16.1.6",
+    "next-sanity": "^9.12.2",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "sanity": "^3.99.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "eslint": "^9.27.0",
+    "eslint-config-next": "16.1.6",
+    "typescript": "^5.8.3"
+  }
+}
