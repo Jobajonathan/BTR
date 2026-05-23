@@ -41,9 +41,9 @@ export default async function AboutPage() {
       </section>
 
       {team && team.length > 0 && (
-        <section className="section">
-          <p className="eyebrow" style={{ marginBottom: 8 }}>Team</p>
-          <h2 style={{ fontSize: "clamp(28px,3vw,42px)", marginBottom: 40 }}>
+        <section className="section" style={{ maxWidth: 860, margin: "0 auto" }}>
+          <p className="eyebrow" style={{ marginBottom: 16 }}>Team</p>
+          <h2 style={{ fontSize: "clamp(28px,3vw,42px)", marginBottom: 48, marginTop: 12 }}>
             The people behind the movement.
           </h2>
           <div className="team-grid">
@@ -53,17 +53,19 @@ export default async function AboutPage() {
                   <Image
                     src={member.image_url}
                     alt={member.name}
-                    width={80}
-                    height={80}
+                    width={88}
+                    height={88}
                     className="team-avatar"
                     unoptimized
                   />
                 ) : (
                   <div className="team-avatar-placeholder" />
                 )}
-                <h3>{member.name}</h3>
-                {member.role && <p className="team-role">{member.role}</p>}
-                {member.bio && <p className="team-bio">{member.bio}</p>}
+                <div className="team-card-info">
+                  <h3>{member.name}</h3>
+                  {member.role && <p className="team-role">{member.role}</p>}
+                  {member.bio && <p className="team-bio">{member.bio}</p>}
+                </div>
               </article>
             ))}
           </div>

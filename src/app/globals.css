@@ -614,22 +614,25 @@ a {
 
 /* Team grid */
 .team-grid {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 24px;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
 .team-card {
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 10px;
-  padding: 24px;
+  padding: 28px 32px;
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
 }
 
 .team-avatar {
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 14px;
+  flex-shrink: 0;
 }
 
 .team-avatar-placeholder {
@@ -637,26 +640,38 @@ a {
   height: 80px;
   border-radius: 50%;
   background: var(--green-soft);
-  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.team-card-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .team-card h3 {
-  font-size: 17px;
+  font-size: 20px;
   margin: 0 0 4px;
 }
 
 .team-role {
   color: var(--green);
-  font-size: 13px;
-  font-weight: 600;
-  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 12px;
 }
 
 .team-bio {
   color: var(--muted);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.65;
   margin: 0;
+}
+
+@media (max-width: 640px) {
+  .team-card {
+    flex-direction: column;
+    gap: 16px;
+  }
 }
 
 /* Submission form */

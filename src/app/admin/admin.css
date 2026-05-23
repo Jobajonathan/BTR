@@ -6,6 +6,8 @@
   min-height: 100vh;
   background: var(--cream);
   color: var(--ink);
+  /* Explicitly inherit the body font from root layout branding injection */
+  font-family: inherit;
 }
 
 .admin-sidebar {
@@ -135,12 +137,8 @@
   min-width: 0;
 }
 
-.admin-main h1,
-.admin-main h2,
-.admin-main h3,
-.admin-main h4 {
-  font-family: inherit;
-}
+/* Headings in admin intentionally use the same heading font as the frontend
+   (injected via root layout CSS vars from the branding table) */
 
 .admin-topbar {
   background: var(--paper);
