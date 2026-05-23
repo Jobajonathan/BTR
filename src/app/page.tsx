@@ -200,7 +200,6 @@ export default async function Home() {
           <div className="story-panel family-panel">
             <span>Family &amp; Silence</span>
             <strong>The things we never said at home</strong>
-            <p>Stories that make hidden emotions easier to name.</p>
           </div>
           <div className="story-panel dialogue-panel">
             <span>Dialogues</span>
