@@ -29,7 +29,7 @@ export async function listAdminUsers(): Promise<AdminUser[]> {
     email: u.email ?? "",
     role: (roleMap.get(u.id)?.role as AdminRole) ?? "super_admin",
     created_at: u.created_at,
-    invited_at: (u as Record<string, unknown>).invited_at as string | null ?? null,
+    invited_at: (u as unknown as Record<string, unknown>).invited_at as string | null ?? null,
     email_confirmed_at: u.email_confirmed_at ?? null,
     last_sign_in_at: u.last_sign_in_at ?? null
   }));
