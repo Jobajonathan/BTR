@@ -85,14 +85,14 @@ export default function UsersClient({
     setInviteStatus("sending");
     setInviteError("");
     startTransition(async () => {
-      try {
-        await inviteAdminUser(inviteEmail, inviteRole);
+      const result = await inviteAdminUser(inviteEmail, inviteRole);
+      if (result?.error) {
+        setInviteStatus("error");
+        setInviteError(result.error);
+      } else {
         setInviteStatus("sent");
         setInviteEmail("");
         setTimeout(() => { setInviteStatus("idle"); setShowInvite(false); }, 2500);
-      } catch (e) {
-        setInviteStatus("error");
-        setInviteError(String(e));
       }
     });
   }
@@ -101,26 +101,32 @@ export default function UsersClient({
     if (!confirm(`Resend invitation email to ${user.email}?`)) return;
     setResendingId(user.id);
     startTransition(async () => {
-      try {
-        await resendInvitation(user.email, user.role);
-      } finally {
-        setResendingId(null);
-      }
+      const result = await resendInvitation(user.email, user.role);
+      setResendingId(null);
+      if (result?.error) alert(`Failed to resend: ${result.error}`);
     });
   }
 
   function handleRoleChange(userId: string, role: AdminRole) {
     startTransition(async () => {
-      await updateUserRole(userId, role);
-      setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, role } : u)));
+      const result = await updateUserRole(userId, role);
+      if (result?.error) {
+        alert(`Failed to update role: ${result.error}`);
+      } else {
+        setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, role } : u)));
+      }
     });
   }
 
   function handleRemove(userId: string, email: string) {
     if (!confirm(`Remove ${email}'s admin access? They will no longer be able to log in.`)) return;
     startTransition(async () => {
-      await removeAdminUser(userId);
-      setUsers((prev) => prev.filter((u) => u.id !== userId));
+      const result = await removeAdminUser(userId);
+      if (result?.error) {
+        alert(`Failed to remove user: ${result.error}`);
+      } else {
+        setUsers((prev) => prev.filter((u) => u.id !== userId));
+      }
     });
   }
 

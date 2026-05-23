@@ -14,6 +14,10 @@ export type AdminUser = {
   last_sign_in_at: string | null;
 };
 
+export type ActionResult = { error?: string };
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://btr.theryters.com";
+
 export async function listAdminUsers(): Promise<AdminUser[]> {
   const supabase = createAdminClient();
 
@@ -35,55 +39,63 @@ export async function listAdminUsers(): Promise<AdminUser[]> {
   }));
 }
 
-export async function inviteAdminUser(email: string, role: AdminRole) {
+export async function inviteAdminUser(email: string, role: AdminRole): Promise<ActionResult> {
   const supabase = createAdminClient();
 
   const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://btr.theryters.com"}/admin/login`
+    redirectTo: `${SITE_URL}/admin/login`
   });
 
-  if (error) throw new Error(error.message);
+  if (error) return { error: error.message };
 
-  await supabase.from("admin_roles").upsert({
+  const { error: roleError } = await supabase.from("admin_roles").upsert({
     user_id: data.user.id,
     email,
     role
   });
 
+  if (roleError) return { error: roleError.message };
+
   revalidatePath("/admin/users");
+  return {};
 }
 
-export async function resendInvitation(email: string, role: AdminRole) {
+export async function resendInvitation(email: string, role: AdminRole): Promise<ActionResult> {
   const supabase = createAdminClient();
 
   const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://btr.theryters.com"}/admin/login`
+    redirectTo: `${SITE_URL}/admin/login`
   });
 
-  if (error) throw new Error(error.message);
+  if (error) return { error: error.message };
 
-  // Ensure role is still set correctly
-  await supabase.from("admin_roles").upsert({
+  const { error: roleError } = await supabase.from("admin_roles").upsert({
     user_id: data.user.id,
     email,
     role
   });
 
+  if (roleError) return { error: roleError.message };
+
   revalidatePath("/admin/users");
+  return {};
 }
 
-export async function updateUserRole(userId: string, role: AdminRole) {
+export async function updateUserRole(userId: string, role: AdminRole): Promise<ActionResult> {
   const supabase = createAdminClient();
   const { error } = await supabase
     .from("admin_roles")
     .update({ role })
     .eq("user_id", userId);
-  if (error) throw new Error(error.message);
+  if (error) return { error: error.message };
   revalidatePath("/admin/users");
+  return {};
 }
 
-export async function removeAdminUser(userId: string) {
+export async function removeAdminUser(userId: string): Promise<ActionResult> {
   const supabase = createAdminClient();
-  await supabase.from("admin_roles").delete().eq("user_id", userId);
+  const { error } = await supabase.from("admin_roles").delete().eq("user_id", userId);
+  if (error) return { error: error.message };
   revalidatePath("/admin/users");
+  return {};
 }
