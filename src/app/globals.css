@@ -1120,19 +1120,154 @@ a {
   color: var(--ink);
 }
 
-.prose h2 { font-size: 26px; margin: 36px 0 14px; }
-.prose h3 { font-size: 22px; margin: 28px 0 10px; }
+/* ── Headings ── */
+.prose h1 {
+  font-size: clamp(30px, 4vw, 40px);
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 40px 0 16px;
+}
+.prose h2 { font-size: clamp(22px, 3vw, 28px); font-weight: 800; line-height: 1.15; margin: 36px 0 14px; }
+.prose h3 { font-size: clamp(18px, 2.5vw, 22px); font-weight: 700; margin: 28px 0 10px; }
+.prose h4 { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 24px 0 8px; }
+
+/* ── Paragraphs ── */
 .prose p { margin: 0 0 20px; }
-.prose ul, .prose ol { padding-left: 24px; margin: 0 0 20px; line-height: 1.7; }
+
+/* ── Text alignment ── */
+.prose [style*="text-align: center"], .prose [style*="text-align:center"] { text-align: center; }
+.prose [style*="text-align: right"],  .prose [style*="text-align:right"]  { text-align: right; }
+.prose [style*="text-align: justify"],.prose [style*="text-align:justify"]{ text-align: justify; }
+
+/* ── Inline formatting ── */
+.prose strong { font-weight: 800; }
+.prose em     { font-style: italic; }
+.prose u      { text-decoration: underline; text-underline-offset: 2px; }
+.prose s      { text-decoration: line-through; opacity: 0.6; }
+.prose mark   { background: #fff176; border-radius: 2px; padding: 0 3px; }
+.prose sub    { font-size: 0.75em; vertical-align: sub; }
+.prose sup    { font-size: 0.75em; vertical-align: super; }
+
+/* ── Inline code ── */
+.prose code {
+  background: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 14px;
+  padding: 1px 6px;
+  color: #c0392b;
+}
+
+/* ── Code block ── */
+.prose pre {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  border-radius: 10px;
+  padding: 20px 22px;
+  margin: 0 0 24px;
+  overflow-x: auto;
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+  border-radius: 0;
+}
+
+/* ── Blockquote ── */
 .prose blockquote {
   border-left: 4px solid var(--green);
+  background: var(--green-soft);
+  border-radius: 0 8px 8px 0;
   margin: 28px 0;
-  padding: 12px 20px;
+  padding: 16px 22px;
   font-style: italic;
-  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--ink);
 }
-.prose a { color: var(--green); text-decoration: underline; }
-.prose img { max-width: 100%; border-radius: 8px; margin: 24px 0; }
+
+.prose blockquote p { margin: 0; }
+
+/* ── Lists ── */
+.prose ul, .prose ol { padding-left: 26px; margin: 0 0 20px; line-height: 1.7; }
+.prose li { margin-bottom: 6px; }
+.prose li p { margin: 0; }
+.prose ul { list-style-type: disc; }
+.prose ol { list-style-type: decimal; }
+.prose ul ul, .prose ol ol,
+.prose ul ol, .prose ol ul { margin: 6px 0 0 0; }
+
+/* ── Horizontal rule ── */
+.prose hr {
+  border: none;
+  border-top: 2px solid var(--line);
+  margin: 36px 0;
+}
+
+/* ── Links ── */
+.prose a {
+  color: var(--green);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 600;
+}
+
+.prose a:hover { opacity: 0.8; }
+
+/* ── Images ── */
+.prose img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin: 28px 0;
+  display: block;
+}
+
+/* ── Tables ── */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 28px;
+  font-size: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.prose th,
+.prose td {
+  border: 1px solid var(--line);
+  padding: 11px 16px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  background: var(--green-soft);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--green);
+}
+
+.prose td p { margin: 0; }
+
+.prose tr:nth-child(even) td { background: color-mix(in srgb, var(--paper) 60%, transparent); }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .prose { font-size: 16px; }
+  .prose table { font-size: 14px; display: block; overflow-x: auto; }
+  .prose th, .prose td { padding: 8px 10px; }
+}
 
 /* ── Why BTR section ─────────────────────────────────────────── */
 .why-btr-section {
