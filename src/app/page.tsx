@@ -149,14 +149,24 @@ export default async function Home() {
       <div className="resource-grid">
         {resources && resources.length > 0 ? (
           resources.map((resource) => (
-            <article className="resource-card" key={resource.id}>
+            <Link
+              className="resource-card"
+              href={resource.slug ? `/resources/${resource.slug}` : "/resources"}
+              key={resource.id}
+            >
               <h3>{resource.title}</h3>
               <p>{resource.excerpt ?? "Guide · 5 min read"}</p>
-            </article>
+              <span className="resource-card-cta">Read more →</span>
+            </Link>
           ))
         ) : (
           <p style={{ color: "var(--muted)" }}>Resources coming soon.</p>
         )}
+      </div>
+      <div style={{ textAlign: "center", marginTop: 36 }}>
+        <Link className="button secondary" href="/resources">
+          Browse all resources
+        </Link>
       </div>
     </section>
   );
