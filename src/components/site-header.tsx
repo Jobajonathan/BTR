@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { navItems } from "@/lib/content";
 import { getBranding } from "@/lib/supabase/cache";
+import { MobileNav } from "@/components/mobile-nav";
 
 export async function SiteHeader() {
   const branding = await getBranding();
@@ -30,6 +31,8 @@ export async function SiteHeader() {
       <Link className="button primary header-cta" href="/join">
         Join the Community
       </Link>
+      {/* Mobile hamburger + drawer */}
+      <MobileNav />
     </header>
   );
 }

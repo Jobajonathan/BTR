@@ -605,9 +605,15 @@ a {
   gap: 13px;
 }
 
+/* ── Tablet (≤980px) ─────────────────────────────────────────── */
 @media (max-width: 980px) {
-  .nav-links {
+  .nav-links,
+  .header-cta {
     display: none;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
   }
 
   .hero,
@@ -632,6 +638,253 @@ a {
   .feature-row {
     grid-template-columns: 1fr;
   }
+
+  /* Hero visual: fixed height → auto, hide overflowing absolute panels on tablet */
+  .hero-visual {
+    height: 320px;
+  }
+
+  .family-panel {
+    left: 20px;
+    top: 24px;
+    width: 220px;
+  }
+
+  .dialogue-panel {
+    bottom: 24px;
+    right: 20px;
+    width: 200px;
+  }
+}
+
+/* ── Mobile (≤640px) ─────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Header */
+  .site-header {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* Sections */
+  .section {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .page-hero {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  /* Hero */
+  .hero {
+    min-height: unset;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    gap: 32px;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 10vw, 52px);
+    margin: 16px 0;
+  }
+
+  .hero-lede {
+    font-size: 17px;
+  }
+
+  /* Hide the decorative visual on small phones — text content is what matters */
+  .hero-visual {
+    display: none;
+  }
+
+  /* Impact strip: stack vertically */
+  .impact-strip {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding-top: 36px;
+    padding-bottom: 36px;
+    min-height: unset;
+  }
+
+  .impact-strip h2 {
+    grid-column: 1 / -1;
+    font-size: 20px;
+  }
+
+  .stat strong {
+    font-size: 30px;
+  }
+
+  /* Section intro */
+  .section-intro {
+    margin-bottom: 28px;
+  }
+
+  .section-intro h2 {
+    font-size: clamp(26px, 7vw, 34px);
+  }
+
+  /* Dialogue card */
+  .dialogue-card {
+    padding: 24px 20px;
+  }
+
+  .dialogue-card h3 {
+    font-size: 24px;
+  }
+
+  /* Dialogue listing card */
+  .dialogue-listing-card {
+    grid-template-columns: 1fr;
+  }
+
+  .dialogue-card-body {
+    padding: 20px;
+  }
+
+  /* Resource cards */
+  .resource-card {
+    min-height: unset;
+  }
+
+  /* Outreach collage — hide on mobile, just show text */
+  .outreach-collage {
+    display: none;
+  }
+
+  /* Community CTA */
+  .community-cta {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .community-cta h2 {
+    font-size: clamp(26px, 7vw, 36px);
+  }
+
+  /* Page hero */
+  .page-hero h1 {
+    font-size: clamp(28px, 8vw, 42px);
+  }
+
+  /* Footer */
+  .site-footer {
+    gap: 36px;
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  /* Partners grid */
+  .partners-featured-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Stories page */
+  .stories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Blog */
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Join page */
+  .join-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Admin — hide on public mobile (it's only accessed on desktop) */
+  .users-stats-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Mobile hamburger button ─────────────────────────────────── */
+.mobile-menu-btn {
+  display: none; /* shown only inside the ≤980px breakpoint above */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: auto;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 24px;
+}
+
+.hamburger span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+  transform-origin: center;
+}
+
+/* Animate to X when open */
+.hamburger.is-open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.is-open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger.is-open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── Mobile nav overlay + panel ─────────────────────────────── */
+.mobile-nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-nav-panel {
+  background: var(--cream);
+  padding: 80px 28px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  max-width: 400px;
+  min-height: 100dvh;
+  box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+}
+
+.mobile-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-nav-link {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  transition: color 0.15s;
+}
+
+.mobile-nav-link:hover {
+  color: var(--green);
 }
 
 /* Team grid */
