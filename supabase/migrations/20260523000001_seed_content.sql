@@ -32,9 +32,8 @@ VALUES (
 
   '[
     {"value": "1M+",    "label": "people reached through stories and conversations"},
-    {"value": "200+",   "label": "community stories shared across Africa"},
-    {"value": "95%",    "label": "of participants report better mental health understanding"},
-    {"value": "34,000", "label": "young people reached through direct outreaches"}
+    {"value": "3",      "label": "core pillars: storytelling, dialogues, outreaches"},
+    {"value": "Africa", "label": "centered voice, context, and community care"}
   ]'::jsonb,
 
   'https://www.instagram.com/behindthereels.co/',
