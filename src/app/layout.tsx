@@ -10,11 +10,15 @@ export const metadata: Metadata = {
 };
 
 function buildGoogleFontsUrl(heading: string, body: string): string {
-  const system = new Set(["Inter", "Georgia", "system-ui"]);
-  const fonts = [...new Set([heading, body])].filter((f) => !system.has(f));
+  // Only exclude true system fonts that are never on Google Fonts.
+  // Inter must NOT be excluded — it is not a system font on Windows/Linux
+  // and must be loaded explicitly, otherwise the browser falls back to
+  // Segoe UI / system-ui which looks completely different.
+  const neverOnGoogleFonts = new Set(["Georgia", "system-ui", "serif", "sans-serif", "monospace"]);
+  const fonts = [...new Set([heading, body])].filter((f) => !neverOnGoogleFonts.has(f));
   if (fonts.length === 0) return "";
   const params = fonts
-    .map((f) => `family=${encodeURIComponent(f)}:wght@400;600;700;800`)
+    .map((f) => `family=${encodeURIComponent(f)}:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400`)
     .join("&");
   return `https://fonts.googleapis.com/css2?${params}&display=swap`;
 }
