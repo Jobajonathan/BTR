@@ -48,9 +48,11 @@ export default async function RootLayout({
       --rose: #f0c7b7;
       --line: #e5d9c8;
       --white: #ffffff;
+      --body-font: '${bodyFont}', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --heading-font: '${headingFont}', ui-sans-serif, system-ui, -apple-system, sans-serif;
     }
-    html { font-family: '${bodyFont}', ui-sans-serif, system-ui, -apple-system, sans-serif; }
-    h1,h2,h3,h4,h5,h6 { font-family: '${headingFont}', ui-serif, Georgia, serif; }
+    html { font-family: var(--body-font); }
+    h1,h2,h3,h4,h5,h6 { font-family: var(--heading-font); }
   `;
 
   return (
