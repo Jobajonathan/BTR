@@ -29,8 +29,7 @@ const DEFAULT_SECTIONS: HomepageSection[] = [
   { id: "stories",   label: "Stories",   visible: true, order: 1 },
   { id: "dialogues", label: "Dialogues", visible: true, order: 2 },
   { id: "outreach",  label: "Outreach",  visible: true, order: 3 },
-  { id: "resources", label: "Resources", visible: true, order: 4 },
-  { id: "advocacy",  label: "Advocacy",  visible: true, order: 5 }
+  { id: "resources", label: "Resources", visible: true, order: 4 }
 ];
 
 function mergeSections(stored: HomepageSection[]): HomepageSection[] {
@@ -41,7 +40,9 @@ function mergeSections(stored: HomepageSection[]): HomepageSection[] {
       base.push({ ...def, order: base.length + 1 });
     }
   }
-  return base.sort((a, b) => a.order - b.order);
+  // Remove any sections that no longer exist in defaults
+  const validIds = new Set(DEFAULT_SECTIONS.map((s) => s.id));
+  return base.filter((s) => validIds.has(s.id)).sort((a, b) => a.order - b.order);
 }
 
 export default function SettingsForm({ data }: { data: Settings }) {

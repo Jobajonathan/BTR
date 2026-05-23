@@ -16,8 +16,7 @@ const DEFAULT_SECTIONS = [
   { id: "stories",   visible: true, order: 1 },
   { id: "dialogues", visible: true, order: 2 },
   { id: "outreach",  visible: true, order: 3 },
-  { id: "resources", visible: true, order: 4 },
-  { id: "advocacy",  visible: true, order: 5 }
+  { id: "resources", visible: true, order: 4 }
 ];
 
 const WHY_BTR_PILLARS = [
@@ -64,20 +63,6 @@ const TESTIMONIALS = [
   }
 ];
 
-const CURRENT_PROJECTS = [
-  {
-    tag: "Ongoing",
-    title: "A 100 Days Series",
-    body: "A 100-day storytelling series exploring mental health through the voices of young Africans. Each day, a new perspective, a new voice, a new reason to keep going.",
-    accent: "var(--yellow)"
-  },
-  {
-    tag: "Active",
-    title: "PRAXAGON PROJECT 24",
-    body: "A community mental health project connecting 24 schools across Nigeria through dialogue, resources, and peer support — building mental wellness into everyday school life.",
-    accent: "var(--rose)"
-  }
-];
 
 export default async function Home() {
   const supabase = createAdminClient();
@@ -234,44 +219,11 @@ export default async function Home() {
     </section>
   );
 
-  const advocacySection = (
-    <section key="advocacy" className="section advocacy-section">
-      <div className="advocacy-inner">
-        <SectionIntro
-          kicker="Advocacy"
-          title="Changing systems, not just conversations."
-          body="Beyond storytelling, BTR advocates for mental health policy, community infrastructure, and a cultural shift that makes seeking help the norm — not the exception."
-        />
-        <div className="advocacy-cards">
-          <div className="advocacy-card">
-            <span>🏛️</span>
-            <h4>Policy Engagement</h4>
-            <p>Working with institutions to embed mental health into youth programmes, school curricula, and community policy.</p>
-          </div>
-          <div className="advocacy-card">
-            <span>🤝</span>
-            <h4>Partnership Building</h4>
-            <p>Connecting NGOs, corporates, and governments to amplify impact and create sustainable mental health infrastructure.</p>
-          </div>
-          <div className="advocacy-card">
-            <span>📢</span>
-            <h4>Public Awareness</h4>
-            <p>Campaigns, media features, and community events that normalise mental health conversations across Africa.</p>
-          </div>
-        </div>
-        <Link className="button primary" href="/partner" style={{ marginTop: 12 }}>
-          Partner With BTR
-        </Link>
-      </div>
-    </section>
-  );
-
   const sectionMap: Record<string, React.ReactNode> = {
     stories:   storiesSection,
     dialogues: dialoguesSection,
     outreach:  outreachSection,
-    resources: resourcesSection,
-    advocacy:  advocacySection
+    resources: resourcesSection
   };
 
   return (
@@ -357,29 +309,6 @@ export default async function Home() {
               </blockquote>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ── Current Projects ──────────────────────────────────── */}
-      <section className="section projects-section">
-        <SectionIntro
-          kicker="Current Projects"
-          title="The work happening right now."
-          body="From ongoing storytelling series to school outreach programmes, here's what BTR is building across Africa."
-        />
-        <div className="projects-grid">
-          {CURRENT_PROJECTS.map((project) => (
-            <article
-              className="project-card"
-              key={project.title}
-              style={{ "--project-accent": project.accent } as React.CSSProperties}
-            >
-              <div className="project-card-accent-bar" />
-              <span className="project-tag">{project.tag}</span>
-              <h3>{project.title}</h3>
-              <p>{project.body}</p>
-            </article>
-          ))}
         </div>
       </section>
 
