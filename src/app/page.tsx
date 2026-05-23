@@ -3,78 +3,170 @@ import { ContentCard } from "@/components/content-card";
 import { SectionIntro } from "@/components/section-intro";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { fallbackResources, fallbackStories } from "@/lib/content";
-import { getSanityClient } from "@/sanity/client";
-import { homepageQuery } from "@/sanity/queries";
+import { createAdminClient } from "@/lib/supabase/admin";
 
-type StoryCard = {
-  _id: string;
-  title: string;
-  excerpt?: string;
-  category?: string;
-  slug?: { current: string };
-};
+const defaultStats = [
+  { value: "1M+", label: "people reached through stories and conversations" },
+  { value: "3", label: "core pillars: storytelling, dialogues, outreaches" },
+  { value: "Africa", label: "centered voice, context, and community care" }
+];
 
-type ResourceCard = {
-  _id: string;
-  title: string;
-  excerpt?: string;
-  slug?: { current: string };
-};
-
-type Dialogue = {
-  _id: string;
-  title: string;
-  summary?: string;
-};
-
-type HomepageData = {
-  settings?: {
-    heroHeadline?: string;
-    heroCopy?: string;
-    impactStats?: Array<{ value: string; label: string }>;
-  };
-  featuredStories?: StoryCard[];
-  resources?: ResourceCard[];
-  dialogues?: Dialogue[];
-};
-
-async function getHomepageData(): Promise<HomepageData> {
-  const client = getSanityClient();
-
-  if (!client) {
-    return {};
-  }
-
-  return client.fetch<HomepageData>(homepageQuery, {}, { next: { revalidate: 60 } });
-}
+const DEFAULT_SECTIONS = [
+  { id: "stories",   visible: true, order: 1 },
+  { id: "dialogues", visible: true, order: 2 },
+  { id: "outreach",  visible: true, order: 3 },
+  { id: "resources", visible: true, order: 4 }
+];
 
 export default async function Home() {
-  const data = await getHomepageData();
-  const settings = data.settings;
-  const stories: StoryCard[] = data.featuredStories?.length
-    ? data.featuredStories
-    : fallbackStories.slice(0, 3);
-  const resources: ResourceCard[] = data.resources?.length
-    ? data.resources
-    : fallbackResources;
-  const featuredDialogue = data.dialogues?.[0];
-  const stats = settings?.impactStats?.length
-    ? settings.impactStats
-    : [
-        {
-          value: "1M+",
-          label: "people reached through stories and conversations"
-        },
-        {
-          value: "3",
-          label: "core pillars: storytelling, dialogues, outreaches"
-        },
-        {
-          value: "Africa",
-          label: "centered voice, context, and community care"
-        }
-      ];
+  const supabase = createAdminClient();
+
+  const [
+    { data: settings },
+    { data: featuredStories },
+    { data: latestDialogue },
+    { data: resources }
+  ] = await Promise.all([
+    supabase.from("site_settings").select("*").eq("id", "00000000-0000-0000-0000-000000000001").single(),
+    supabase
+      .from("stories")
+      .select("id, title, slug, excerpt, cover_image_url, categories(title)")
+      .eq("featured", true)
+      .not("published_at", "is", null)
+      .order("published_at", { ascending: false })
+      .limit(3),
+    supabase
+      .from("dialogues")
+      .select("id, title, summary")
+      .order("date", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase.from("resources").select("id, title, excerpt, slug").limit(4)
+  ]);
+
+  const heroHeadline = settings?.hero_headline ?? "Behind every reel is a real story.";
+  const heroCopy =
+    settings?.hero_copy ??
+    "A fast-growing mental health community helping young Africans speak honestly about pressure, identity, family, anxiety, healing, and hope.";
+  const primaryCtaLabel = settings?.hero_primary_cta_label ?? "Read Stories";
+  const primaryCtaUrl = settings?.hero_primary_cta_url ?? "/stories";
+  const secondaryCtaLabel = settings?.hero_secondary_cta_label ?? "Submit Your Story";
+  const secondaryCtaUrl = settings?.hero_secondary_cta_url ?? "/submit";
+
+  const stats: Array<{ value: string; label: string }> =
+    Array.isArray(settings?.impact_stats) && settings.impact_stats.length
+      ? settings.impact_stats
+      : defaultStats;
+
+  const rawSections =
+    Array.isArray(settings?.homepage_sections) && settings.homepage_sections.length
+      ? settings.homepage_sections
+      : DEFAULT_SECTIONS;
+
+  const sections = [...rawSections]
+    .sort((a, b) => a.order - b.order)
+    .filter((s) => s.visible);
+
+  const storiesSection = (
+    <section key="stories" className="section stories-section">
+      <SectionIntro
+        kicker="Stories"
+        title="Read what young Africans are carrying."
+        body="Personal essays, reflections, and educational articles that make invisible emotions easier to understand."
+      />
+      <div className="card-grid">
+        {featuredStories && featuredStories.length > 0 ? (
+          featuredStories.map((story, index) => (
+            <ContentCard
+              accent={(index % 3) + 1}
+              excerpt={story.excerpt ?? undefined}
+              href={story.slug ? `/stories/${story.slug}` : "/stories"}
+              image={story.cover_image_url ?? undefined}
+              key={story.id}
+              tag={(story.categories as unknown as { title: string } | null)?.title ?? "Story"}
+              title={story.title}
+            />
+          ))
+        ) : (
+          <p style={{ color: "var(--muted)" }}>Stories coming soon.</p>
+        )}
+      </div>
+    </section>
+  );
+
+  const dialoguesSection = (
+    <section key="dialogues" className="dialogue-section section dark-section">
+      <SectionIntro
+        kicker="Dialogues"
+        title="Conversations we were never taught to have."
+        body="Live sessions, interviews, panels, and community questions that turn shared posts into shared understanding."
+        dark
+      />
+      <article className="dialogue-card">
+        <span className="tag">Next conversation</span>
+        <h3>
+          {latestDialogue?.title ??
+            "Pressure, parents, and the version of yourself you perform online"}
+        </h3>
+        <p>
+          {latestDialogue?.summary ??
+            "A community dialogue on expectation, identity, and choosing honesty when everyone expects you to be fine."}
+        </p>
+        <Link className="button primary" href="/dialogues">
+          View Dialogues
+        </Link>
+      </article>
+    </section>
+  );
+
+  const outreachSection = (
+    <section key="outreach" className="section outreach-section">
+      <div className="outreach-collage" aria-hidden="true">
+        <div>Campus dialogue</div>
+        <div>Community circle</div>
+        <div>Partner outreach</div>
+      </div>
+      <div>
+        <SectionIntro
+          kicker="Outreach"
+          title="Mental health work that leaves the screen."
+          body="Schools, communities, partners, and supporters — see what the movement is doing offline through recaps, galleries, and impact reports."
+        />
+        <Link className="button primary" href="/outreach">
+          Explore Impact
+        </Link>
+      </div>
+    </section>
+  );
+
+  const resourcesSection = (
+    <section key="resources" className="section resources-section">
+      <SectionIntro
+        kicker="Resources"
+        title="Practical guides for the moments that feel heavy."
+        body="Culturally sensitive mental health resources written for young Africans and the people who care about them."
+      />
+      <div className="resource-grid">
+        {resources && resources.length > 0 ? (
+          resources.map((resource) => (
+            <article className="resource-card" key={resource.id}>
+              <h3>{resource.title}</h3>
+              <p>{resource.excerpt ?? "Guide · 5 min read"}</p>
+            </article>
+          ))
+        ) : (
+          <p style={{ color: "var(--muted)" }}>Resources coming soon.</p>
+        )}
+      </div>
+    </section>
+  );
+
+  const sectionMap: Record<string, React.ReactNode> = {
+    stories: storiesSection,
+    dialogues: dialoguesSection,
+    outreach: outreachSection,
+    resources: resourcesSection
+  };
 
   return (
     <main>
@@ -83,23 +175,20 @@ export default async function Home() {
       <section className="hero section">
         <div className="hero-copy">
           <p className="eyebrow">Mental health for young Africans</p>
-          <h1>{settings?.heroHeadline || "Behind every reel is a real story."}</h1>
-          <p className="hero-lede">
-            {settings?.heroCopy ||
-              "A fast-growing mental health community helping young Africans speak honestly about pressure, identity, family, anxiety, healing, and hope."}
-          </p>
+          <h1>{heroHeadline}</h1>
+          <p className="hero-lede">{heroCopy}</p>
           <div className="actions">
-            <Link className="button primary" href="/stories">
-              Read Stories
+            <Link className="button primary" href={primaryCtaUrl}>
+              {primaryCtaLabel}
             </Link>
-            <Link className="button secondary" href="/submit">
-              Submit Your Story
+            <Link className="button secondary" href={secondaryCtaUrl}>
+              {secondaryCtaLabel}
             </Link>
           </div>
         </div>
         <div className="hero-visual" aria-hidden="true">
           <div className="story-panel family-panel">
-            <span>Family & Silence</span>
+            <span>Family &amp; Silence</span>
             <strong>The things we never said at home</strong>
             <p>Stories that make hidden emotions easier to name.</p>
           </div>
@@ -121,88 +210,13 @@ export default async function Home() {
         ))}
       </section>
 
-      <section className="section stories-section">
-        <SectionIntro
-          kicker="Stories"
-          title="Read what young Africans are carrying."
-          body="Personal essays, reflections, and educational articles that make invisible emotions easier to understand."
-        />
-        <div className="card-grid">
-          {stories.map((story, index) => (
-            <ContentCard
-              accent={(index % 3) + 1}
-              excerpt={story.excerpt}
-              href={story.slug?.current ? `/stories/${story.slug.current}` : "/stories"}
-              key={story._id}
-              tag={story.category || "Story"}
-              title={story.title}
-            />
-          ))}
-        </div>
-      </section>
-
-      <section className="dialogue-section section dark-section">
-        <SectionIntro
-          kicker="Dialogues"
-          title="Conversations we were never taught to have."
-          body="Live sessions, interviews, panels, and community questions that turn shared posts into shared understanding."
-          dark
-        />
-        <article className="dialogue-card">
-          <span className="tag">Next conversation</span>
-          <h3>
-            {featuredDialogue?.title ||
-              "Pressure, parents, and the version of yourself you perform online"}
-          </h3>
-          <p>
-            {featuredDialogue?.summary ||
-              "A community dialogue on expectation, identity, and choosing honesty when everyone expects you to be fine."}
-          </p>
-          <Link className="button primary" href="/dialogues">
-            View Dialogues
-          </Link>
-        </article>
-      </section>
-
-      <section className="section outreach-section">
-        <div className="outreach-collage" aria-hidden="true">
-          <div>Campus dialogue</div>
-          <div>Community circle</div>
-          <div>Partner outreach</div>
-        </div>
-        <div>
-          <SectionIntro
-            kicker="Outreach"
-            title="Mental health work that leaves the screen."
-            body="Show schools, communities, partners, and supporters what the movement is doing offline through recaps, galleries, and impact reports."
-          />
-          <Link className="button primary" href="/outreach">
-            Explore Impact
-          </Link>
-        </div>
-      </section>
-
-      <section className="section resources-section">
-        <SectionIntro
-          kicker="Resources"
-          title="Practical guides for the moments that feel heavy."
-          body="Culturally sensitive mental health resources written for young Africans and the people who care about them."
-        />
-        <div className="resource-grid">
-          {resources.map((resource) => (
-            <article className="resource-card" key={resource._id}>
-              <h3>{resource.title}</h3>
-              <p>{resource.excerpt || "Guide - 5 min read"}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      {sections.map((s) => sectionMap[s.id] ?? null)}
 
       <section className="community-cta">
         <h2>There is a story behind what you survived.</h2>
         <p>
-          Join the community, share your story, or partner with Behind the Reels
-          to make mental health conversations easier to start.
+          Join the community, share your story, or partner with Behind the Reels to make mental health
+          conversations easier to start.
         </p>
         <div className="actions">
           <Link className="button light" href="/join">

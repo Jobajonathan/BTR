@@ -1,17 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import { navItems } from "@/lib/content";
+import { getBranding } from "@/lib/supabase/cache";
 
-export function SiteHeader() {
+export async function SiteHeader() {
+  const branding = await getBranding();
+  const logoUrl = branding?.logo_url ?? "/images/btr-logo.jpg";
+
   return (
     <header className="site-header">
       <Link className="brand" href="/" aria-label="Behind the Reels home">
         <Image
-          src="/images/btr-logo.jpg"
+          src={logoUrl}
           alt="Behind the Reels logo"
           width={44}
           height={44}
           priority
+          unoptimized={logoUrl.startsWith("https://")}
         />
         <span>Behind the Reels</span>
       </Link>

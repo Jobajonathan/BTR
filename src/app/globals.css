@@ -1,16 +1,4 @@
-:root {
-  --ink: #18211e;
-  --muted: #5c655f;
-  --cream: #f7f1e7;
-  --paper: #fffcf5;
-  --green: #1f6b4a;
-  --green-soft: #ddeddd;
-  --yellow: #f5c84b;
-  --coral: #d86f52;
-  --rose: #f0c7b7;
-  --line: #e5d9c8;
-  --white: #ffffff;
-}
+/* Brand tokens are injected by layout.tsx from Supabase branding */
 
 * {
   box-sizing: border-box;
@@ -623,6 +611,149 @@ a {
     grid-template-columns: 1fr;
   }
 }
+
+/* Team grid */
+.team-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.team-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.team-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 14px;
+}
+
+.team-avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--green-soft);
+  margin-bottom: 14px;
+}
+
+.team-card h3 {
+  font-size: 17px;
+  margin: 0 0 4px;
+}
+
+.team-role {
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.team-bio {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Submission form */
+.submit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.submit-form input,
+.submit-form select,
+.submit-form textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 15px;
+  padding: 10px 12px;
+  font-family: inherit;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.submit-form textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.submit-success {
+  background: var(--green-soft);
+  border: 1px solid var(--green);
+  border-radius: 10px;
+  padding: 32px;
+  text-align: center;
+}
+
+.submit-success h2 {
+  color: var(--green);
+  margin: 0 0 10px;
+}
+
+/* Article / detail pages */
+.story-article {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 80px) clamp(24px, 6vw, 88px);
+}
+
+.story-header {
+  margin-bottom: 36px;
+}
+
+.story-header h1 {
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1.08;
+  margin: 16px 0 14px;
+}
+
+.story-lede {
+  font-size: 19px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0 0 16px;
+}
+
+.story-byline {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.story-cover {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 36px;
+}
+
+.prose {
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+.prose h2 { font-size: 26px; margin: 36px 0 14px; }
+.prose h3 { font-size: 22px; margin: 28px 0 10px; }
+.prose p { margin: 0 0 20px; }
+.prose ul, .prose ol { padding-left: 24px; margin: 0 0 20px; line-height: 1.7; }
+.prose blockquote {
+  border-left: 4px solid var(--green);
+  margin: 28px 0;
+  padding: 12px 20px;
+  font-style: italic;
+  color: var(--muted);
+}
+.prose a { color: var(--green); text-decoration: underline; }
+.prose img { max-width: 100%; border-radius: 8px; margin: 24px 0; }
 
 @media (max-width: 640px) {
   .site-header {
