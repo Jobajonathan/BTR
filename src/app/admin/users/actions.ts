@@ -46,7 +46,33 @@ export async function inviteAdminUser(email: string, role: AdminRole): Promise<A
     redirectTo: `${SITE_URL}/admin/login`
   });
 
-  if (error) return { error: error.message };
+  // "User already registered" — their Auth record exists but has no admin role.
+  // Look them up and restore the role so they can sign in again.
+  if (error) {
+    if (error.message.toLowerCase().includes("already") || error.status === 422) {
+      const { data: list } = await supabase.auth.admin.listUsers({ perPage: 1000 });
+      const existing = list?.users.find((u) => u.email === email);
+      if (!existing) return { error: error.message };
+
+      const { error: roleError } = await supabase.from("admin_roles").upsert({
+        user_id: existing.id,
+        email,
+        role
+      });
+      if (roleError) return { error: roleError.message };
+
+      // Send a password-reset email so they can get back in
+      await supabase.auth.admin.generateLink({
+        type: "recovery",
+        email,
+        options: { redirectTo: `${SITE_URL}/admin/login` }
+      });
+
+      revalidatePath("/admin/users");
+      return {};
+    }
+    return { error: error.message };
+  }
 
   const { error: roleError } = await supabase.from("admin_roles").upsert({
     user_id: data.user.id,
@@ -94,8 +120,18 @@ export async function updateUserRole(userId: string, role: AdminRole): Promise<A
 
 export async function removeAdminUser(userId: string): Promise<ActionResult> {
   const supabase = createAdminClient();
-  const { error } = await supabase.from("admin_roles").delete().eq("user_id", userId);
-  if (error) return { error: error.message };
+
+  // Remove role record first
+  const { error: roleError } = await supabase
+    .from("admin_roles")
+    .delete()
+    .eq("user_id", userId);
+  if (roleError) return { error: roleError.message };
+
+  // Delete from Supabase Auth so the email can be re-invited cleanly later
+  const { error: authError } = await supabase.auth.admin.deleteUser(userId);
+  if (authError) return { error: authError.message };
+
   revalidatePath("/admin/users");
   return {};
 }

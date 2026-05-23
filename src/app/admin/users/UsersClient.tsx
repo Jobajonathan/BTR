@@ -119,7 +119,7 @@ export default function UsersClient({
   }
 
   function handleRemove(userId: string, email: string) {
-    if (!confirm(`Remove ${email}'s admin access? They will no longer be able to log in.`)) return;
+    if (!confirm(`Remove ${email} from admin? Their account will be deleted — you can re-invite them later.`)) return;
     startTransition(async () => {
       const result = await removeAdminUser(userId);
       if (result?.error) {
