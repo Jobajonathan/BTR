@@ -32,7 +32,7 @@ export default async function PartnerPage() {
           initiatives. Together we make the conversations happen.
         </p>
         <div style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
-          <a href="mailto:hello@btr.theryters.com" className="button primary">
+          <a href="mailto:info@behindthereels.com" className="button primary">
             Get in touch
           </a>
           <Link href="/join" className="button secondary">
@@ -184,7 +184,7 @@ export default async function PartnerPage() {
           Reach out and let&apos;s find the best way to work together.
         </p>
         <a
-          href="mailto:hello@btr.theryters.com"
+          href="mailto:info@behindthereels.com"
           className="button"
           style={{ background: "#fff", color: "var(--green)", fontWeight: 800 }}
         >
