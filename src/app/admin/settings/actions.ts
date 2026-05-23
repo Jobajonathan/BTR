@@ -2,7 +2,6 @@
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
-import { revalidateTag } from "next/cache";
 
 const SETTINGS_ID = "00000000-0000-0000-0000-000000000001";
 
@@ -40,8 +39,7 @@ export async function saveSettings(data: {
 
   if (error) throw new Error(error.message);
 
-  revalidateTag("site_settings");
-  revalidatePath("/");
+  revalidatePath("/", "layout");
   revalidatePath("/join");
   revalidatePath("/admin/settings");
 }
