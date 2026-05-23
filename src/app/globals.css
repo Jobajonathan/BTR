@@ -639,21 +639,28 @@ a {
     grid-template-columns: 1fr;
   }
 
-  /* Hero visual: shrink on tablet */
+  /* Hero visual: maintain overlapping design at tablet, just scaled */
   .hero-visual {
-    height: 320px;
+    height: 400px;
   }
 
   .family-panel {
-    left: 20px;
-    top: 24px;
-    width: 220px;
+    left: 28px;
+    top: 36px;
+    width: 58%;
   }
 
   .dialogue-panel {
-    bottom: 24px;
-    right: 20px;
-    width: 200px;
+    bottom: 36px;
+    right: 28px;
+    width: 58%;
+  }
+
+  .portrait-orb {
+    width: 120px;
+    height: 120px;
+    right: 36px;
+    top: 36px;
   }
 
   /* Outreach collage: switch from absolute to grid so blocks don't overlap */
@@ -719,35 +726,35 @@ a {
     font-size: 17px;
   }
 
-  /* Hero visual: shrink and reposition panels for small screens */
+  /* Hero visual: keep the overlapping collage design, just scaled for mobile */
   .hero-visual {
-    height: 280px;
+    height: 360px;
     width: 100%;
   }
 
   .family-panel {
-    left: 16px;
-    top: 16px;
-    width: 180px;
-    padding: 16px;
+    left: 20px;
+    top: 30px;
+    width: 62%;
+    padding: 18px;
   }
 
   .family-panel strong {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .dialogue-panel {
-    bottom: 16px;
-    right: 16px;
-    width: 170px;
-    padding: 16px;
+    bottom: 30px;
+    right: 20px;
+    width: 62%;
+    padding: 18px;
   }
 
   .portrait-orb {
-    width: 90px;
-    height: 90px;
-    right: 20px;
-    top: 20px;
+    width: 100px;
+    height: 100px;
+    right: 24px;
+    top: 24px;
   }
 
   /* Impact strip: stack vertically */
