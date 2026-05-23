@@ -9,16 +9,7 @@ export const metadata = {
 export default function NewsletterPage() {
   return (
     <PageShell>
-      <section
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0,1fr) minmax(0,480px)",
-          gap: "clamp(40px,6vw,80px)",
-          alignItems: "center",
-          padding: "clamp(72px,9vw,120px) clamp(24px,6vw,88px)",
-          background: "var(--paper)"
-        }}
-      >
+      <section className="newsletter-page-hero">
         <div>
           <p className="eyebrow" style={{ marginBottom: 20 }}>Newsletter</p>
           <h1 style={{ fontSize: "clamp(36px,5vw,62px)", lineHeight: 1.03, margin: "0 0 22px" }}>

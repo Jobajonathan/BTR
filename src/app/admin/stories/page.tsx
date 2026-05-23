@@ -41,7 +41,8 @@ export default async function StoriesPage({
       </div>
       <div className="admin-content">
         <StoriesListClient
-          stories={stories ?? []}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          stories={(stories ?? []) as any}
           totalCount={count ?? 0}
           currentPage={currentPage}
           totalPages={totalPages}

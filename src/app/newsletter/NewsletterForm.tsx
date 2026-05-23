@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { subscribeToNewsletter } from "../actions";
 
-const INITIAL = { ok: false };
+const INITIAL: { ok: boolean; error?: string } = { ok: false };
 
 export default function NewsletterForm() {
   const [state, action, isPending] = useActionState(subscribeToNewsletter, INITIAL);

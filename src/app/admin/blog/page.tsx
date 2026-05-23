@@ -41,7 +41,8 @@ export default async function AdminBlogPage({
       </div>
       <div className="admin-content">
         <BlogListClient
-          posts={(posts ?? []) as Parameters<typeof BlogListClient>[0]["posts"]}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          posts={(posts ?? []) as any}
           totalCount={count ?? 0}
           currentPage={currentPage}
           totalPages={totalPages}

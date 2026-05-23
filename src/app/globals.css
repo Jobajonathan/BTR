@@ -996,9 +996,19 @@ a {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 12%, transparent);
 }
 
+/* Newsletter page */
+.newsletter-page-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 480px);
+  gap: clamp(40px, 6vw, 80px);
+  align-items: center;
+  padding: clamp(72px, 9vw, 120px) clamp(24px, 6vw, 88px);
+  background: var(--paper);
+}
+
 @media (max-width: 860px) {
-  section[style*="grid-template-columns"][style*="480px"] {
-    grid-template-columns: 1fr !important;
+  .newsletter-page-hero {
+    grid-template-columns: 1fr;
   }
 }
 

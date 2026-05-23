@@ -12,7 +12,8 @@ type Post = {
   featured: boolean;
   published_at: string | null;
   view_count: number | null;
-  authors: { name: string } | null;
+  // Supabase returns joined rows as an array
+  authors: { name: string }[] | null;
 };
 
 export default function BlogListClient({
@@ -119,7 +120,7 @@ export default function BlogListClient({
                   <span>/blog/{post.slug}</span>
                 </td>
                 <td style={{ color: "var(--muted)", fontSize: 13 }}>
-                  {post.authors?.name ?? "—"}
+                  {post.authors?.[0]?.name ?? "—"}
                 </td>
                 <td>
                   {post.published_at ? (

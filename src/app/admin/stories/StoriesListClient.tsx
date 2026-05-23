@@ -12,7 +12,8 @@ type Story = {
   featured: boolean;
   published_at: string | null;
   view_count: number | null;
-  categories: { title: string } | null;
+  // Supabase returns joined rows as an array
+  categories: { title: string }[] | null;
 };
 
 export default function StoriesListClient({
@@ -122,8 +123,7 @@ export default function StoriesListClient({
                   <span>/stories/{s.slug}</span>
                 </td>
                 <td>
-                  {/* @ts-expect-error supabase join */}
-                  {s.categories?.title ?? <span style={{ color: "#aaa" }}>—</span>}
+                  {s.categories?.[0]?.title ?? <span style={{ color: "#aaa" }}>—</span>}
                 </td>
                 <td>
                   {s.published_at ? (

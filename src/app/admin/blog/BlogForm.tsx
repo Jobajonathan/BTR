@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useRef } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { saveBlogPost, deleteBlogPost, duplicateBlogPost } from "./actions";
@@ -56,19 +56,19 @@ export default function BlogForm({
   );
   const [status, setStatus] = useState<"idle" | "saved" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [isDirty, setIsDirty] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const isDirty = useRef(false);
   const router = useRouter();
 
   function set<K extends keyof BlogPost>(key: K, value: BlogPost[K]) {
-    isDirty.current = true;
+    setIsDirty(true);
     setForm((f) => ({ ...f, [key]: value }));
   }
 
-  useUnsavedChanges(isPending ? false : isDirty.current);
+  useUnsavedChanges(isDirty && !isPending);
 
   function handleTitleChange(title: string) {
-    isDirty.current = true;
+    setIsDirty(true);
     setForm((f) => ({
       ...f,
       title,
@@ -87,7 +87,7 @@ export default function BlogForm({
     } else {
       setShowSchedule(true);
     }
-    isDirty.current = true;
+    setIsDirty(true);
   }
 
   function handleSave() {
@@ -95,7 +95,7 @@ export default function BlogForm({
     startTransition(async () => {
       try {
         await saveBlogPost(form);
-        isDirty.current = false;
+        setIsDirty(false);
         setStatus("saved");
         setTimeout(() => setStatus("idle"), 3000);
         if (!form.id) router.push("/admin/blog");

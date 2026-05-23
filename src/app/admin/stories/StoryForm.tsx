@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useRef } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { saveStory, deleteStory, duplicateStory } from "./actions";
@@ -57,20 +57,20 @@ export default function StoryForm({
   );
   const [status, setStatus] = useState<"idle" | "saved" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [isDirty, setIsDirty] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const isDirty = useRef(false);
   const router = useRouter();
 
   // Mark dirty on any field change
   function set<K extends keyof Story>(key: K, value: Story[K]) {
-    isDirty.current = true;
+    setIsDirty(true);
     setForm((f) => ({ ...f, [key]: value }));
   }
 
-  useUnsavedChanges(isPending ? false : isDirty.current);
+  useUnsavedChanges(isDirty && !isPending);
 
   function handleTitleChange(title: string) {
-    isDirty.current = true;
+    setIsDirty(true);
     setForm((f) => ({
       ...f,
       title,
@@ -89,7 +89,7 @@ export default function StoryForm({
     } else {
       setShowSchedule(true);
     }
-    isDirty.current = true;
+    setIsDirty(true);
   }
 
   function handleSave() {
@@ -97,7 +97,7 @@ export default function StoryForm({
     startTransition(async () => {
       try {
         await saveStory(form);
-        isDirty.current = false;
+        setIsDirty(false);
         setStatus("saved");
         setTimeout(() => setStatus("idle"), 3000);
         if (!form.id) router.push("/admin/stories");

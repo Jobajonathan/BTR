@@ -20,7 +20,8 @@ export default async function AdminNewsletterPage() {
       </div>
       <div className="admin-content">
         <NewsletterClient
-          subscribers={(subscribers ?? []) as Parameters<typeof NewsletterClient>[0]["subscribers"]}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          subscribers={(subscribers ?? []) as any}
           total={count ?? 0}
         />
       </div>
