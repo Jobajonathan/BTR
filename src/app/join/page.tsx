@@ -10,14 +10,14 @@ type SocialChannel = {
 };
 
 const CHANNELS: SocialChannel[] = [
-  { label: "Instagram",  key: "instagram_url",  icon: "📸", color: "#E1306C", description: "Follow our daily content and stories" },
-  { label: "TikTok",     key: "tiktok_url",     icon: "🎵", color: "#010101", description: "Short videos on mental health" },
-  { label: "Twitter / X",key: "twitter_url",    icon: "✕",  color: "#000000", description: "Conversations and updates" },
-  { label: "Facebook",   key: "facebook_url",   icon: "f",  color: "#1877F2", description: "Community posts and events" },
-  { label: "YouTube",    key: "youtube_url",    icon: "▶",  color: "#FF0000", description: "Long-form dialogues and recaps" },
-  { label: "WhatsApp",   key: "whatsapp_url",   icon: "💬", color: "#25D366", description: "Join our community group" },
-  { label: "Telegram",   key: "telegram_url",   icon: "✈",  color: "#229ED9", description: "Channel updates and resources" },
-  { label: "LinkedIn",   key: "linkedin_url",   icon: "in", color: "#0A66C2", description: "Professional network and partnerships" }
+  { label: "Instagram",   key: "instagram_url", icon: "📸", color: "#E1306C", description: "Follow our daily content and stories" },
+  { label: "TikTok",      key: "tiktok_url",    icon: "🎵", color: "#010101", description: "Short videos on mental health" },
+  { label: "Twitter / X", key: "twitter_url",   icon: "✕",  color: "#000000", description: "Conversations and updates" },
+  { label: "Facebook",    key: "facebook_url",  icon: "f",  color: "#1877F2", description: "Community posts and events" },
+  { label: "YouTube",     key: "youtube_url",   icon: "▶",  color: "#FF0000", description: "Long-form dialogues and recaps" },
+  { label: "WhatsApp",    key: "whatsapp_url",  icon: "💬", color: "#25D366", description: "Join our community group" },
+  { label: "Telegram",    key: "telegram_url",  icon: "✈",  color: "#229ED9", description: "Channel updates and resources" },
+  { label: "LinkedIn",    key: "linkedin_url",  icon: "in", color: "#0A66C2", description: "Professional network and partnerships" }
 ];
 
 export default async function JoinPage() {
@@ -29,6 +29,25 @@ export default async function JoinPage() {
 
   return (
     <PageShell>
+      <style>{`
+        .social-card {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          background: var(--paper);
+          border: 1px solid var(--line);
+          border-radius: 12px;
+          padding: 24px 22px;
+          text-decoration: none;
+          color: var(--ink);
+          transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .social-card:hover {
+          border-color: var(--card-color);
+          box-shadow: 0 4px 16px color-mix(in srgb, var(--card-color) 13%, transparent);
+        }
+      `}</style>
+
       <section className="page-hero about-hero">
         <p className="eyebrow">Community</p>
         <h1>Join the Behind the Reels community.</h1>
@@ -55,26 +74,8 @@ export default async function JoinPage() {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 12,
-                    background: "var(--paper)",
-                    border: "1px solid var(--line)",
-                    borderRadius: 12,
-                    padding: "24px 22px",
-                    textDecoration: "none",
-                    color: "var(--ink)",
-                    transition: "border-color 0.15s, box-shadow 0.15s"
-                  }}
-                  onMouseOver={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.borderColor = channel.color;
-                    (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 4px 16px ${channel.color}22`;
-                  }}
-                  onMouseOut={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--line)";
-                    (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
-                  }}
+                  className="social-card"
+                  style={{ "--card-color": channel.color } as React.CSSProperties}
                 >
                   <div
                     style={{
