@@ -693,9 +693,35 @@ a {
     font-size: 17px;
   }
 
-  /* Hide the decorative visual on small phones — text content is what matters */
+  /* Hero visual: shrink and reposition panels for small screens */
   .hero-visual {
-    display: none;
+    height: 280px;
+    width: 100%;
+  }
+
+  .family-panel {
+    left: 16px;
+    top: 16px;
+    width: 180px;
+    padding: 16px;
+  }
+
+  .family-panel strong {
+    font-size: 18px;
+  }
+
+  .dialogue-panel {
+    bottom: 16px;
+    right: 16px;
+    width: 170px;
+    padding: 16px;
+  }
+
+  .portrait-orb {
+    width: 90px;
+    height: 90px;
+    right: 20px;
+    top: 20px;
   }
 
   /* Impact strip: stack vertically */
