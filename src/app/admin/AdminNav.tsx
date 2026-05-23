@@ -27,27 +27,36 @@ const ALL_NAV: NavGroup[] = [
   {
     label: "Content",
     items: [
-      { href: "/admin/stories",    label: "Stories",            icon: "✦", section: "stories" },
-      { href: "/admin/blog",       label: "Blog",               icon: "✍", section: "blog" },
-      { href: "/admin/dialogues",  label: "Dialogues",          icon: "◎", section: "dialogues" },
-      { href: "/admin/outreach",   label: "Outreaches",         icon: "◈", section: "outreach" },
-      { href: "/admin/resources",  label: "Resources",          icon: "▣", section: "resources" },
+      { href: "/admin/stories",    label: "Stories",              icon: "✦", section: "stories" },
+      { href: "/admin/blog",       label: "Blog",                 icon: "✍", section: "blog" },
+      { href: "/admin/dialogues",  label: "Dialogues",            icon: "◎", section: "dialogues" },
+      { href: "/admin/outreach",   label: "Outreaches",           icon: "◈", section: "outreach" },
+      { href: "/admin/resources",  label: "Resources",            icon: "▣", section: "resources" },
       { href: "/admin/authors",    label: "Authors & Categories", icon: "◉", section: "authors" },
-      { href: "/admin/team",       label: "Team Members",       icon: "◐", section: "team" },
-      { href: "/admin/submissions",label: "Submissions",        icon: "✉", section: "submissions" }
+      { href: "/admin/team",       label: "Team Members",         icon: "◐", section: "team" },
+      { href: "/admin/submissions",label: "Submissions",          icon: "✉", section: "submissions" }
+    ]
+  },
+  {
+    label: "Community",
+    items: [
+      { href: "/admin/newsletter", label: "Newsletter",           icon: "◍", section: "newsletter" },
+      { href: "/admin/partners",   label: "Partners",             icon: "◇", section: "partners" }
     ]
   },
   {
     label: "People",
     items: [
-      { href: "/admin/users", label: "Admin Users", icon: "◍", section: "users" }
+      { href: "/admin/users",      label: "Admin Users",          icon: "◍", section: "users" }
     ]
   },
   {
     label: "Site",
     items: [
-      { href: "/admin/settings", label: "Site Settings",   icon: "◧", section: "settings" },
-      { href: "/admin/branding", label: "Branding & Fonts", icon: "◑", section: "branding" }
+      { href: "/admin/settings",   label: "Site Settings",        icon: "◧", section: "settings" },
+      { href: "/admin/branding",   label: "Branding & Fonts",     icon: "◑", section: "branding" },
+      { href: "/admin/media",      label: "Media Library",        icon: "◰", section: "media" },
+      { href: "/admin/activity",   label: "Activity Log",         icon: "◴", section: "activity" }
     ]
   }
 ];
@@ -88,6 +97,17 @@ export default function AdminNav({
           <span>Behind the Reels</span>
         </div>
       </div>
+
+      {/* View site link */}
+      <a
+        href="/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="admin-view-site"
+      >
+        <span style={{ fontSize: 12 }}>↗</span>
+        View site
+      </a>
 
       <nav className="admin-nav">
         {visibleNav.map((group) => (

@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { saveStory, deleteStory } from "./actions";
+import { saveStory, deleteStory, duplicateStory } from "./actions";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import ImageUpload from "@/components/admin/ImageUpload";
+import CharacterCount from "@/components/admin/CharacterCount";
+import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 
 type Author = { id: string; name: string };
 type Category = { id: string; title: string };
@@ -26,8 +28,15 @@ type Story = {
   seo_description: string;
 };
 
+type PublishState = "draft" | "published" | "scheduled";
+
 function toSlug(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+function derivePublishState(published_at: string): PublishState {
+  if (!published_at) return "draft";
+  return new Date(published_at) > new Date() ? "scheduled" : "published";
 }
 
 export default function StoryForm({
@@ -40,16 +49,28 @@ export default function StoryForm({
   categories: Category[];
 }) {
   const [form, setForm] = useState<Story>(story);
+  const [publishState, setPublishState] = useState<PublishState>(
+    derivePublishState(story.published_at)
+  );
+  const [showSchedule, setShowSchedule] = useState(
+    derivePublishState(story.published_at) === "scheduled"
+  );
   const [status, setStatus] = useState<"idle" | "saved" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [isPending, startTransition] = useTransition();
+  const isDirty = useRef(false);
   const router = useRouter();
 
+  // Mark dirty on any field change
   function set<K extends keyof Story>(key: K, value: Story[K]) {
+    isDirty.current = true;
     setForm((f) => ({ ...f, [key]: value }));
   }
 
+  useUnsavedChanges(isPending ? false : isDirty.current);
+
   function handleTitleChange(title: string) {
+    isDirty.current = true;
     setForm((f) => ({
       ...f,
       title,
@@ -57,11 +78,26 @@ export default function StoryForm({
     }));
   }
 
+  function handlePublishClick(state: PublishState) {
+    setPublishState(state);
+    if (state === "published") {
+      setForm((f) => ({ ...f, published_at: new Date().toISOString().slice(0, 16) }));
+      setShowSchedule(false);
+    } else if (state === "draft") {
+      setForm((f) => ({ ...f, published_at: "" }));
+      setShowSchedule(false);
+    } else {
+      setShowSchedule(true);
+    }
+    isDirty.current = true;
+  }
+
   function handleSave() {
     setStatus("idle");
     startTransition(async () => {
       try {
         await saveStory(form);
+        isDirty.current = false;
         setStatus("saved");
         setTimeout(() => setStatus("idle"), 3000);
         if (!form.id) router.push("/admin/stories");
@@ -73,18 +109,48 @@ export default function StoryForm({
   }
 
   function handleDelete() {
-    if (!form.id || !confirm("Permanently delete this story?")) return;
+    if (!form.id || !confirm("Permanently delete this story? This cannot be undone.")) return;
     startTransition(async () => {
       await deleteStory(form.id!);
       router.push("/admin/stories");
     });
   }
 
+  function handleDuplicate() {
+    if (!form.id || !confirm("Duplicate this story? A draft copy will be created.")) return;
+    startTransition(async () => {
+      const newId = await duplicateStory(form.id!);
+      router.push(`/admin/stories/${newId}`);
+    });
+  }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
+
   return (
     <>
-      <Link href="/admin/stories" className="back-link">
-        ← Back to Stories
-      </Link>
+      <div className="form-topbar">
+        <Link href="/admin/stories" className="back-link">
+          ← Back to Stories
+        </Link>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          {form.id && form.slug && (
+            <a
+              href={`${siteUrl}/stories/${form.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-ghost"
+              style={{ fontSize: 13 }}
+            >
+              View on site ↗
+            </a>
+          )}
+          {form.id && (
+            <button className="btn-ghost" onClick={handleDuplicate} disabled={isPending} style={{ fontSize: 13 }}>
+              Duplicate
+            </button>
+          )}
+        </div>
+      </div>
 
       {status === "saved" && (
         <div className="alert alert-success">Story saved successfully.</div>
@@ -131,9 +197,7 @@ export default function StoryForm({
             >
               <option value="">— Select author —</option>
               {authors.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.name}
-                </option>
+                <option key={a.id} value={a.id}>{a.name}</option>
               ))}
             </select>
           </div>
@@ -145,19 +209,9 @@ export default function StoryForm({
             >
               <option value="">— Select category —</option>
               {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.title}
-                </option>
+                <option key={c.id} value={c.id}>{c.title}</option>
               ))}
             </select>
-          </div>
-          <div className="admin-field">
-            <label>Published at</label>
-            <input
-              type="datetime-local"
-              value={form.published_at}
-              onChange={(e) => set("published_at", e.target.value)}
-            />
           </div>
           <div className="admin-field">
             <label>Instagram URL</label>
@@ -203,7 +257,10 @@ export default function StoryForm({
       <div className="admin-card">
         <p className="admin-card-title">SEO</p>
         <div className="admin-field">
-          <label>SEO title <span className="field-hint">(leave blank to use the story title)</span></label>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <label>SEO title <span className="field-hint">(leave blank to use the story title)</span></label>
+            <CharacterCount value={form.seo_title} max={60} />
+          </div>
           <input
             type="text"
             value={form.seo_title}
@@ -211,7 +268,10 @@ export default function StoryForm({
           />
         </div>
         <div className="admin-field">
-          <label>SEO description</label>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <label>SEO description</label>
+            <CharacterCount value={form.seo_description} max={160} />
+          </div>
           <textarea
             value={form.seo_description}
             onChange={(e) => set("seo_description", e.target.value)}
@@ -220,13 +280,63 @@ export default function StoryForm({
         </div>
       </div>
 
+      {/* Publish panel */}
+      <div className="admin-card publish-panel">
+        <p className="admin-card-title">Publish</p>
+        <div className="publish-toggle">
+          <button
+            type="button"
+            className={`publish-btn${publishState === "draft" ? " active" : ""}`}
+            onClick={() => handlePublishClick("draft")}
+          >
+            Save draft
+          </button>
+          <button
+            type="button"
+            className={`publish-btn publish-btn-green${publishState === "published" ? " active" : ""}`}
+            onClick={() => handlePublishClick("published")}
+          >
+            Publish now
+          </button>
+          <button
+            type="button"
+            className={`publish-btn${publishState === "scheduled" ? " active" : ""}`}
+            onClick={() => handlePublishClick("scheduled")}
+          >
+            Schedule
+          </button>
+        </div>
+
+        {showSchedule && (
+          <div className="admin-field" style={{ marginTop: 14 }}>
+            <label>Scheduled publish date &amp; time</label>
+            <input
+              type="datetime-local"
+              value={form.published_at}
+              onChange={(e) => set("published_at", e.target.value)}
+            />
+          </div>
+        )}
+
+        {publishState === "published" && !showSchedule && (
+          <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 10 }}>
+            Will publish immediately when saved.
+          </p>
+        )}
+        {publishState === "draft" && (
+          <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 10 }}>
+            Will not appear on the site until published.
+          </p>
+        )}
+      </div>
+
       <div className="form-actions">
         <button
           className="btn-primary"
           onClick={handleSave}
           disabled={isPending}
         >
-          {isPending ? "Saving…" : "Save story"}
+          {isPending ? "Saving…" : publishState === "draft" ? "Save draft" : "Save & publish"}
         </button>
         {form.id && (
           <button

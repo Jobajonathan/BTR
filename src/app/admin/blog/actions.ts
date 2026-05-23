@@ -53,3 +53,23 @@ export async function deleteBlogPost(id: string) {
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
 }
+
+export async function duplicateBlogPost(id: string): Promise<string> {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (error || !data) throw new Error("Post not found");
+  const { id: _id, created_at: _ca, updated_at: _ua, view_count: _vc, ...rest } = data;
+  const slug = `${rest.slug}-copy-${Date.now()}`;
+  const { data: inserted, error: insertError } = await supabase
+    .from("blog_posts")
+    .insert({ ...rest, title: `${rest.title} (Copy)`, slug, published_at: null })
+    .select("id")
+    .single();
+  if (insertError || !inserted) throw new Error(insertError?.message ?? "Duplicate failed");
+  revalidatePath("/admin/blog");
+  return inserted.id;
+}

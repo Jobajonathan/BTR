@@ -11,10 +11,17 @@ export const ROLE_LABELS: Record<AdminRole, string> = {
 
 /** Permissions per role — what nav sections each role can access */
 export const ROLE_PERMISSIONS: Record<AdminRole, string[]> = {
-  super_admin: ["dashboard", "stories", "blog", "dialogues", "outreach", "resources", "authors", "team", "submissions", "users", "settings", "branding"],
-  editor:      ["dashboard", "stories", "blog", "dialogues", "outreach", "resources", "authors", "team", "submissions"],
-  author:      ["dashboard", "blog"],
-  moderator:   ["dashboard", "submissions"]
+  super_admin: [
+    "dashboard", "stories", "blog", "dialogues", "outreach", "resources",
+    "authors", "team", "submissions", "users", "settings", "branding",
+    "newsletter", "partners", "media", "activity"
+  ],
+  editor: [
+    "dashboard", "stories", "blog", "dialogues", "outreach", "resources",
+    "authors", "team", "submissions", "newsletter", "partners", "media"
+  ],
+  author: ["dashboard", "blog", "media"],
+  moderator: ["dashboard", "submissions"]
 };
 
 export async function getUserRole(userId: string): Promise<AdminRole> {

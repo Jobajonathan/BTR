@@ -1019,3 +1019,306 @@
 .role-badge-editor       { background: #e8f0fe; color: #1a4b8e; }
 .role-badge-author       { background: #fef9e7; color: #9a7b00; }
 .role-badge-moderator    { background: var(--cream); color: var(--muted); }
+
+/* ── View site link in sidebar ───────────────────────────────── */
+.admin-view-site {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  transition: color 0.12s, background 0.12s;
+  letter-spacing: 0.02em;
+}
+
+.admin-view-site:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.07);
+}
+
+/* ── Form topbar (back + view on site + duplicate) ───────────── */
+.form-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.form-topbar .back-link {
+  margin-bottom: 0;
+}
+
+/* ── Publish toggle ──────────────────────────────────────────── */
+.publish-panel {
+  border-top: 3px solid var(--green);
+}
+
+.publish-toggle {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.publish-btn {
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 18px;
+  cursor: pointer;
+  color: var(--muted);
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  font-family: var(--body-font, Inter, ui-sans-serif, system-ui, sans-serif);
+}
+
+.publish-btn.active {
+  background: var(--paper);
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.publish-btn-green.active {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+.publish-btn:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* ── List toolbar (search + filter) ─────────────────────────── */
+.list-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.list-search {
+  flex: 1;
+  min-width: 180px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 13px;
+  font-family: var(--body-font, Inter, ui-sans-serif, system-ui, sans-serif);
+  padding: 9px 13px;
+  color: var(--ink);
+  background: var(--cream);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.list-search:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 10%, transparent);
+  background: var(--paper);
+}
+
+.list-filter-select {
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 13px;
+  font-family: var(--body-font, Inter, ui-sans-serif, system-ui, sans-serif);
+  padding: 9px 13px;
+  color: var(--ink);
+  background: var(--cream);
+  outline: none;
+  cursor: pointer;
+}
+
+/* ── Pagination ──────────────────────────────────────────────── */
+.list-pagination {
+  display: flex;
+  gap: 4px;
+  padding-top: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  min-width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--paper);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0 8px;
+  font-family: var(--body-font, Inter, ui-sans-serif, system-ui, sans-serif);
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.page-btn:hover {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.page-btn.active {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+/* ── Small danger button (in table rows) ─────────────────────── */
+.btn-danger-sm {
+  background: none;
+  color: #c0392b;
+  border: 1px solid #f5c6c6;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-family: var(--body-font, Inter, ui-sans-serif, system-ui, sans-serif);
+  transition: background 0.12s;
+  line-height: 1.4;
+}
+
+.btn-danger-sm:hover { background: #fff0f0; }
+.btn-danger-sm:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Badge red (activity log deleted) ───────────────────────── */
+.badge-red { background: #fff0f0; color: #c0392b; }
+
+/* ── Media library ───────────────────────────────────────────── */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  padding: 0 32px 32px;
+}
+
+.media-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--paper);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.media-item:hover {
+  border-color: var(--green);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--green) 8%, transparent);
+}
+
+.media-thumb {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  display: block;
+}
+
+.media-thumb-file {
+  width: 100%;
+  height: 100px;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.media-item-info {
+  padding: 8px 10px;
+}
+
+.media-item-name {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.media-item-size {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Media modal */
+.media-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.media-modal {
+  background: var(--paper);
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 480px;
+  width: 100%;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.media-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.media-modal-img {
+  width: 100%;
+  max-height: 340px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+
+/* ── Number input ────────────────────────────────────────────── */
+.admin-field input[type="number"] {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 14px;
+  font-family: var(--body-font, Inter, ui-sans-serif, system-ui, sans-serif);
+  padding: 10px 13px;
+  color: var(--ink);
+  background: var(--paper);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.admin-field input[type="number"]:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 12%, transparent);
+}
