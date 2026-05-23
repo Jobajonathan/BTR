@@ -6,16 +6,77 @@ import { SiteHeader } from "@/components/site-header";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 const defaultStats = [
-  { value: "1M+", label: "people reached through stories and conversations" },
-  { value: "3", label: "core pillars: storytelling, dialogues, outreaches" },
-  { value: "Africa", label: "centered voice, context, and community care" }
+  { value: "1M+",    label: "people reached through stories and conversations" },
+  { value: "200+",   label: "community stories shared across Africa" },
+  { value: "95%",    label: "of participants report better mental health understanding" },
+  { value: "34,000", label: "young people reached through direct outreaches" }
 ];
 
 const DEFAULT_SECTIONS = [
   { id: "stories",   visible: true, order: 1 },
   { id: "dialogues", visible: true, order: 2 },
   { id: "outreach",  visible: true, order: 3 },
-  { id: "resources", visible: true, order: 4 }
+  { id: "resources", visible: true, order: 4 },
+  { id: "advocacy",  visible: true, order: 5 }
+];
+
+const WHY_BTR_PILLARS = [
+  {
+    icon: "🌍",
+    title: "Culturally Rooted",
+    body: "We speak the language of Africa's youth — local stories, local contexts, and the realities that textbooks overlook."
+  },
+  {
+    icon: "🙋🏾",
+    title: "Youth-Driven",
+    body: "Built by young people, for young people. Every decision we make centres the voices of those we serve."
+  },
+  {
+    icon: "✍🏾",
+    title: "Storytelling as Healing",
+    body: "We believe sharing your story is an act of courage, community, and healing. Every story creates space for the next one."
+  },
+  {
+    icon: "📱",
+    title: "Accessible Anywhere",
+    body: "From Instagram to campus halls, our work meets young people exactly where they are — online and offline."
+  }
+];
+
+const TESTIMONIALS = [
+  {
+    quote:
+      "BTR gave me language for what I was feeling. I didn't know how to talk about the pressure at home until I read a story that said exactly what I had been carrying silently.",
+    name: "Ogechi B.",
+    role: "Community member"
+  },
+  {
+    quote:
+      "The campus dialogue changed everything for me. I walked in not knowing a single person and walked out with a community. This is what mental health looks like in real life.",
+    name: "Mercy U.",
+    role: "University student"
+  },
+  {
+    quote:
+      "I submitted my story expecting it to disappear. Instead it sparked a conversation that helped others. Behind the Reels makes your story matter.",
+    name: "Ebere A.",
+    role: "Story contributor"
+  }
+];
+
+const CURRENT_PROJECTS = [
+  {
+    tag: "Ongoing",
+    title: "A 100 Days Series",
+    body: "A 100-day storytelling series exploring mental health through the voices of young Africans. Each day, a new perspective, a new voice, a new reason to keep going.",
+    accent: "var(--yellow)"
+  },
+  {
+    tag: "Active",
+    title: "PRAXAGON PROJECT 24",
+    body: "A community mental health project connecting 24 schools across Nigeria through dialogue, resources, and peer support — building mental wellness into everyday school life.",
+    accent: "var(--rose)"
+  }
 ];
 
 export default async function Home() {
@@ -44,10 +105,12 @@ export default async function Home() {
     supabase.from("resources").select("id, title, excerpt, slug").limit(4)
   ]);
 
-  const heroHeadline = settings?.hero_headline ?? "Behind every reel is a real story.";
+  const heroHeadline =
+    settings?.hero_headline ??
+    "Mental Health & Behavioural Change for Young People Across Africa.";
   const heroCopy =
     settings?.hero_copy ??
-    "A fast-growing mental health community helping young Africans speak honestly about pressure, identity, family, anxiety, healing, and hope.";
+    "Behind the Reels is a pioneering mental health initiative empowering young people to understand, embrace, and invest in their mental health through storytelling, authentic dialogues, and ground-level community outreaches.";
   const primaryCtaLabel = settings?.hero_primary_cta_label ?? "Read Stories";
   const primaryCtaUrl = settings?.hero_primary_cta_url ?? "/stories";
   const secondaryCtaLabel = settings?.hero_secondary_cta_label ?? "Submit Your Story";
@@ -72,7 +135,7 @@ export default async function Home() {
       <SectionIntro
         kicker="Stories"
         title="Read what young Africans are carrying."
-        body="Personal essays, reflections, and educational articles that make invisible emotions easier to understand."
+        body="Personal essays, honest reflections, and educational articles that make invisible emotions easier to name, share, and heal from."
       />
       <div className="card-grid">
         {featuredStories && featuredStories.length > 0 ? (
@@ -91,6 +154,11 @@ export default async function Home() {
           <p style={{ color: "var(--muted)" }}>Stories coming soon.</p>
         )}
       </div>
+      <div style={{ textAlign: "center", marginTop: 40 }}>
+        <Link className="button secondary" href="/stories">
+          Read all stories
+        </Link>
+      </div>
     </section>
   );
 
@@ -99,11 +167,11 @@ export default async function Home() {
       <SectionIntro
         kicker="Dialogues"
         title="Conversations we were never taught to have."
-        body="Live sessions, interviews, panels, and community questions that turn shared posts into shared understanding."
+        body="Live sessions, expert interviews, community panels, and hard questions that turn shared posts into shared understanding and real community."
         dark
       />
       <article className="dialogue-card">
-        <span className="tag">Next conversation</span>
+        <span className="tag">Latest dialogue</span>
         <h3>
           {latestDialogue?.title ??
             "Pressure, parents, and the version of yourself you perform online"}
@@ -130,7 +198,7 @@ export default async function Home() {
         <SectionIntro
           kicker="Outreach"
           title="Mental health work that leaves the screen."
-          body="Schools, communities, partners, and supporters — see what the movement is doing offline through recaps, galleries, and impact reports."
+          body="Schools, communities, partners, and supporters — see what the movement is doing offline through campus visits, community circles, and partner programmes."
         />
         <Link className="button primary" href="/outreach">
           Explore Impact
@@ -144,7 +212,7 @@ export default async function Home() {
       <SectionIntro
         kicker="Resources"
         title="Practical guides for the moments that feel heavy."
-        body="Culturally sensitive mental health resources written for young Africans and the people who care about them."
+        body="Culturally sensitive mental health resources written for young Africans — and the parents, teachers, and friends who want to show up for them."
       />
       <div className="resource-grid">
         {resources && resources.length > 0 ? (
@@ -158,20 +226,59 @@ export default async function Home() {
           <p style={{ color: "var(--muted)" }}>Resources coming soon.</p>
         )}
       </div>
+      <div style={{ textAlign: "center", marginTop: 36 }}>
+        <Link className="button secondary" href="/resources">
+          Browse all resources
+        </Link>
+      </div>
+    </section>
+  );
+
+  const advocacySection = (
+    <section key="advocacy" className="section advocacy-section">
+      <div className="advocacy-inner">
+        <SectionIntro
+          kicker="Advocacy"
+          title="Changing systems, not just conversations."
+          body="Beyond storytelling, BTR advocates for mental health policy, community infrastructure, and a cultural shift that makes seeking help the norm — not the exception."
+        />
+        <div className="advocacy-cards">
+          <div className="advocacy-card">
+            <span>🏛️</span>
+            <h4>Policy Engagement</h4>
+            <p>Working with institutions to embed mental health into youth programmes, school curricula, and community policy.</p>
+          </div>
+          <div className="advocacy-card">
+            <span>🤝</span>
+            <h4>Partnership Building</h4>
+            <p>Connecting NGOs, corporates, and governments to amplify impact and create sustainable mental health infrastructure.</p>
+          </div>
+          <div className="advocacy-card">
+            <span>📢</span>
+            <h4>Public Awareness</h4>
+            <p>Campaigns, media features, and community events that normalise mental health conversations across Africa.</p>
+          </div>
+        </div>
+        <Link className="button primary" href="/partner" style={{ marginTop: 12 }}>
+          Partner With BTR
+        </Link>
+      </div>
     </section>
   );
 
   const sectionMap: Record<string, React.ReactNode> = {
-    stories: storiesSection,
+    stories:   storiesSection,
     dialogues: dialoguesSection,
-    outreach: outreachSection,
-    resources: resourcesSection
+    outreach:  outreachSection,
+    resources: resourcesSection,
+    advocacy:  advocacySection
   };
 
   return (
     <main>
       <SiteHeader />
 
+      {/* ── Hero ──────────────────────────────────────────────── */}
       <section className="hero section">
         <div className="hero-copy">
           <p className="eyebrow">Mental health for young Africans</p>
@@ -200,6 +307,7 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ── Impact strip ──────────────────────────────────────── */}
       <section className="impact-strip">
         <h2>A community moving mental health conversations from timelines into real life.</h2>
         {stats.map((stat) => (
@@ -210,13 +318,77 @@ export default async function Home() {
         ))}
       </section>
 
+      {/* ── Dynamic programme sections ────────────────────────── */}
       {sections.map((s) => sectionMap[s.id] ?? null)}
 
+      {/* ── Why BTR ───────────────────────────────────────────── */}
+      <section className="section why-btr-section">
+        <SectionIntro
+          kicker="Why BTR"
+          title="Mental health support built for Africa's youth."
+          body="We know the pressures, the silences, and the stories young Africans carry. That's why everything we do is rooted in culture, community, and lived experience."
+        />
+        <div className="why-btr-grid">
+          {WHY_BTR_PILLARS.map((pillar) => (
+            <div className="why-btr-pillar" key={pillar.title}>
+              <span className="why-btr-icon" aria-hidden="true">{pillar.icon}</span>
+              <h3>{pillar.title}</h3>
+              <p>{pillar.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Testimonials ──────────────────────────────────────── */}
+      <section className="testimonials-section">
+        <div className="testimonials-inner">
+          <p className="eyebrow" style={{ marginBottom: 18 }}>Voices from the community</p>
+          <h2 className="testimonials-heading">
+            Real people. Real change.
+          </h2>
+          <div className="testimonials-grid">
+            {TESTIMONIALS.map((t) => (
+              <blockquote className="testimonial-card" key={t.name}>
+                <p>&ldquo;{t.quote}&rdquo;</p>
+                <footer>
+                  <strong>{t.name}</strong>
+                  <span>{t.role}</span>
+                </footer>
+              </blockquote>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Current Projects ──────────────────────────────────── */}
+      <section className="section projects-section">
+        <SectionIntro
+          kicker="Current Projects"
+          title="The work happening right now."
+          body="From ongoing storytelling series to school outreach programmes, here's what BTR is building across Africa."
+        />
+        <div className="projects-grid">
+          {CURRENT_PROJECTS.map((project) => (
+            <article
+              className="project-card"
+              key={project.title}
+              style={{ "--project-accent": project.accent } as React.CSSProperties}
+            >
+              <div className="project-card-accent-bar" />
+              <span className="project-tag">{project.tag}</span>
+              <h3>{project.title}</h3>
+              <p>{project.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Community CTA ─────────────────────────────────────── */}
       <section className="community-cta">
         <h2>There is a story behind what you survived.</h2>
         <p>
-          Join the community, share your story, or partner with Behind the Reels to make mental health
-          conversations easier to start.
+          Join the community, share your story, or partner with Behind the Reels to make mental
+          health conversations easier to start — and impossible to ignore.
         </p>
         <div className="actions">
           <Link className="button light" href="/join">

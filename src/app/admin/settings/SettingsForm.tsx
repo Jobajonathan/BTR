@@ -29,16 +29,27 @@ const DEFAULT_SECTIONS: HomepageSection[] = [
   { id: "stories",   label: "Stories",   visible: true, order: 1 },
   { id: "dialogues", label: "Dialogues", visible: true, order: 2 },
   { id: "outreach",  label: "Outreach",  visible: true, order: 3 },
-  { id: "resources", label: "Resources", visible: true, order: 4 }
+  { id: "resources", label: "Resources", visible: true, order: 4 },
+  { id: "advocacy",  label: "Advocacy",  visible: true, order: 5 }
 ];
+
+function mergeSections(stored: HomepageSection[]): HomepageSection[] {
+  const base = stored.length ? [...stored] : [...DEFAULT_SECTIONS];
+  // Add any new default sections that aren't yet in the stored list
+  for (const def of DEFAULT_SECTIONS) {
+    if (!base.find((s) => s.id === def.id)) {
+      base.push({ ...def, order: base.length + 1 });
+    }
+  }
+  return base.sort((a, b) => a.order - b.order);
+}
 
 export default function SettingsForm({ data }: { data: Settings }) {
   const [form, setForm] = useState<Settings>({
     ...data,
-    homepage_sections:
-      Array.isArray(data.homepage_sections) && data.homepage_sections.length
-        ? [...data.homepage_sections].sort((a, b) => a.order - b.order)
-        : DEFAULT_SECTIONS
+    homepage_sections: mergeSections(
+      Array.isArray(data.homepage_sections) ? data.homepage_sections : []
+    )
   });
   const [status, setStatus] = useState<"idle" | "saved" | "error">("idle");
   const [isPending, startTransition] = useTransition();

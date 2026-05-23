@@ -38,6 +38,7 @@ export async function SiteFooter() {
         <Link href="/submit">Submit your story</Link>
         <Link href="/partner">Partner with us</Link>
         <Link href="/join">Community</Link>
+        <Link href="mailto:info@behindthereels.com">info@behindthereels.com</Link>
         {activeSocials.map((s) => (
           <Link
             key={s.key}
