@@ -543,73 +543,355 @@
   background: var(--paper);
 }
 
-.rich-editor-toolbar {
+/* ── Toolbar ── */
+.re-toolbar {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 2px;
   padding: 8px 10px;
   border-bottom: 1px solid var(--line);
   background: var(--cream);
 }
 
-.rich-editor-toolbar button {
+.re-btn {
   background: none;
   border: none;
   border-radius: 5px;
   padding: 5px 8px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--muted);
   font-family: var(--body-font, Inter, ui-sans-serif, system-ui, sans-serif);
-  transition: background 0.12s, color 0.12s;
+  line-height: 1;
+  transition: background 0.1s, color 0.1s;
+  white-space: nowrap;
 }
 
-.rich-editor-toolbar button:hover {
+.re-btn:hover:not(.is-disabled) {
   background: var(--line);
   color: var(--ink);
 }
 
-.rich-editor-toolbar button.is-active {
+.re-btn.is-active {
   background: var(--green);
   color: #fff;
 }
 
-.rich-editor-toolbar .toolbar-sep {
-  width: 1px;
-  background: var(--line);
-  margin: 4px 4px;
+.re-btn.is-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
+.re-sep {
+  display: inline-block;
+  width: 1px;
+  height: 18px;
+  background: var(--line);
+  margin: 0 5px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* ── Link panel ── */
+.re-link-panel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f0f7f3;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.re-link-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.re-link-input {
+  flex: 1;
+  min-width: 220px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  font-size: 13px;
+  padding: 6px 10px;
+  font-family: var(--body-font, Inter, ui-sans-serif, system-ui, sans-serif);
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+}
+
+.re-link-input:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--green) 15%, transparent);
+}
+
+.re-link-apply {
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.re-link-cancel {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.re-link-hint {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── Table context toolbar ── */
+.re-table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: #fff8e6;
+  border-bottom: 1px solid #f0d98a;
+  flex-wrap: wrap;
+}
+
+.re-table-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #7a5f00;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.re-tbtn {
+  background: rgba(0,0,0,0.06);
+  border: none;
+  border-radius: 4px;
+  padding: 4px 9px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--ink);
+  font-family: var(--body-font, Inter, ui-sans-serif, system-ui, sans-serif);
+  transition: background 0.1s;
+  white-space: nowrap;
+}
+
+.re-tbtn:hover { background: rgba(0,0,0,0.12); }
+
+.re-tbtn-danger { color: #c0392b; }
+.re-tbtn-danger:hover { background: #fdecea; }
+
+.re-table-sep {
+  width: 1px;
+  height: 16px;
+  background: #e0c96a;
+  margin: 0 4px;
+}
+
+/* ── Editor content ── */
 .rich-editor .ProseMirror {
-  padding: 16px;
-  min-height: 220px;
+  padding: 20px;
+  min-height: 340px;
   outline: none;
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--ink);
 }
 
-.rich-editor .ProseMirror p { margin: 0 0 12px; }
-.rich-editor .ProseMirror h2 { font-size: 22px; margin: 20px 0 10px; }
-.rich-editor .ProseMirror h3 { font-size: 18px; margin: 16px 0 8px; }
-.rich-editor .ProseMirror ul, .rich-editor .ProseMirror ol { padding-left: 22px; margin: 0 0 12px; }
-.rich-editor .ProseMirror li { margin-bottom: 4px; }
-.rich-editor .ProseMirror blockquote {
-  border-left: 3px solid var(--green);
-  margin: 0 0 12px;
-  padding-left: 14px;
-  color: var(--muted);
-  font-style: italic;
-}
-.rich-editor .ProseMirror a { color: var(--green); text-decoration: underline; }
-.rich-editor .ProseMirror img { max-width: 100%; border-radius: 6px; margin: 8px 0; }
+/* Placeholder */
 .rich-editor .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
-  color: #9ca39d;
+  color: #aab5ac;
   pointer-events: none;
   float: left;
   height: 0;
+}
+
+/* Headings */
+.rich-editor .ProseMirror h1 { font-size: 28px; font-weight: 800; line-height: 1.1; margin: 28px 0 12px; }
+.rich-editor .ProseMirror h2 { font-size: 22px; font-weight: 800; line-height: 1.15; margin: 24px 0 10px; }
+.rich-editor .ProseMirror h3 { font-size: 18px; font-weight: 700; margin: 20px 0 8px; }
+.rich-editor .ProseMirror h4 { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 18px 0 6px; }
+
+/* Paragraph */
+.rich-editor .ProseMirror p { margin: 0 0 14px; }
+
+/* Lists */
+.rich-editor .ProseMirror ul,
+.rich-editor .ProseMirror ol { padding-left: 24px; margin: 0 0 14px; }
+.rich-editor .ProseMirror li { margin-bottom: 5px; line-height: 1.6; }
+.rich-editor .ProseMirror li p { margin: 0; }
+
+/* Blockquote */
+.rich-editor .ProseMirror blockquote {
+  border-left: 4px solid var(--green);
+  margin: 0 0 16px;
+  padding: 10px 16px;
+  background: var(--green-soft);
+  border-radius: 0 6px 6px 0;
+  color: var(--ink);
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.rich-editor .ProseMirror blockquote p { margin: 0; }
+
+/* Inline code */
+.rich-editor .ProseMirror code {
+  background: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 13px;
+  padding: 1px 5px;
+  color: #c0392b;
+}
+
+/* Code block */
+.rich-editor .ProseMirror pre {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 0 0 16px;
+  overflow-x: auto;
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.rich-editor .ProseMirror pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Horizontal rule */
+.rich-editor .ProseMirror hr {
+  border: none;
+  border-top: 2px solid var(--line);
+  margin: 24px 0;
+}
+
+/* Links */
+.rich-editor .ProseMirror a {
+  color: var(--green);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Images */
+.rich-editor .ProseMirror img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 10px 0;
+  display: block;
+}
+
+.rich-editor .ProseMirror img.ProseMirror-selectednode {
+  outline: 3px solid var(--green);
+}
+
+/* Highlight */
+.rich-editor .ProseMirror mark {
+  background: #fff176;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+/* Subscript / superscript */
+.rich-editor .ProseMirror sub { font-size: 0.75em; }
+.rich-editor .ProseMirror sup { font-size: 0.75em; }
+
+/* Tables */
+.rich-editor .ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 0 16px;
+  font-size: 14px;
+  overflow: hidden;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+}
+
+.rich-editor .ProseMirror th,
+.rich-editor .ProseMirror td {
+  border: 1px solid var(--line);
+  padding: 9px 13px;
+  text-align: left;
+  vertical-align: top;
+  position: relative;
+  min-width: 80px;
+}
+
+.rich-editor .ProseMirror th {
+  background: var(--green-soft);
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--green);
+}
+
+.rich-editor .ProseMirror td p { margin: 0; }
+
+.rich-editor .ProseMirror .selectedCell::after {
+  background: color-mix(in srgb, var(--green) 12%, transparent);
+  content: "";
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+}
+
+.rich-editor .ProseMirror .column-resize-handle {
+  background-color: var(--green);
+  bottom: -2px;
+  pointer-events: none;
+  position: absolute;
+  right: -2px;
+  top: 0;
+  width: 3px;
+}
+
+.rich-editor .tableWrapper { overflow-x: auto; }
+
+/* ── Footer stats ── */
+.re-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--line);
+  background: var(--cream);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.re-footer-dot {
+  opacity: 0.4;
 }
 
 /* ── Content tables ──────────────────────────────────────────── */
