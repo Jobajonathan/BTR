@@ -17,7 +17,14 @@ export default async function AdminUsersPage() {
   return (
     <>
       <div className="admin-topbar">
-        <h1>Admin Users</h1>
+        <h1>Users</h1>
+        <div className="topbar-actions">
+          <span style={{ fontSize: 13, color: "var(--muted)" }}>
+            {users.length} {users.length === 1 ? "user" : "users"} ·{" "}
+            {users.filter((u) => u.email_confirmed_at).length} accepted ·{" "}
+            {users.filter((u) => !u.email_confirmed_at).length} pending
+          </span>
+        </div>
       </div>
       <UsersClient users={users} currentUserId={user.id} />
     </>

@@ -1604,3 +1604,104 @@
   border-color: var(--green);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 12%, transparent);
 }
+
+/* ── Users page ──────────────────────────────────────────────── */
+.users-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 700px) {
+  .users-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.users-stat-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.users-stat-card strong {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.users-stat-card span {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.users-stat-green strong { color: var(--green); }
+.users-stat-yellow strong { color: #b45309; }
+.users-stat-gray strong   { color: var(--muted); }
+
+/* Avatar circle — first letter of email */
+.user-avatar-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--green) 14%, transparent);
+  color: var(--green);
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Inline role selector in the table */
+.inline-role-select {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-family: var(--body-font, Inter, ui-sans-serif, system-ui, sans-serif);
+  color: var(--ink);
+  background: var(--paper);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.inline-role-select:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 12%, transparent);
+}
+
+/* Small danger remove button */
+.btn-danger-sm {
+  background: transparent;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  color: #dc2626;
+  font-size: 12px;
+  padding: 4px 9px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  line-height: 1;
+}
+
+.btn-danger-sm:hover {
+  background: #fee2e2;
+  border-color: #f87171;
+}
+
+/* Table action cell layout */
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: flex-end;
+}

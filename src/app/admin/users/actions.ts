@@ -4,6 +4,37 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { type AdminRole } from "@/lib/supabase/roles";
 import { revalidatePath } from "next/cache";
 
+export type AdminUser = {
+  id: string;
+  email: string;
+  role: AdminRole;
+  created_at: string;
+  invited_at: string | null;
+  email_confirmed_at: string | null;
+  last_sign_in_at: string | null;
+};
+
+export async function listAdminUsers(): Promise<AdminUser[]> {
+  const supabase = createAdminClient();
+
+  const [{ data: roles }, { data: authData }] = await Promise.all([
+    supabase.from("admin_roles").select("user_id, email, role, created_at").order("created_at"),
+    supabase.auth.admin.listUsers({ perPage: 1000 })
+  ]);
+
+  const roleMap = new Map(roles?.map((r) => [r.user_id, r]) ?? []);
+
+  return (authData?.users ?? []).map((u) => ({
+    id: u.id,
+    email: u.email ?? "",
+    role: (roleMap.get(u.id)?.role as AdminRole) ?? "super_admin",
+    created_at: u.created_at,
+    invited_at: (u as Record<string, unknown>).invited_at as string | null ?? null,
+    email_confirmed_at: u.email_confirmed_at ?? null,
+    last_sign_in_at: u.last_sign_in_at ?? null
+  }));
+}
+
 export async function inviteAdminUser(email: string, role: AdminRole) {
   const supabase = createAdminClient();
 
@@ -13,6 +44,25 @@ export async function inviteAdminUser(email: string, role: AdminRole) {
 
   if (error) throw new Error(error.message);
 
+  await supabase.from("admin_roles").upsert({
+    user_id: data.user.id,
+    email,
+    role
+  });
+
+  revalidatePath("/admin/users");
+}
+
+export async function resendInvitation(email: string, role: AdminRole) {
+  const supabase = createAdminClient();
+
+  const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://btr.theryters.com"}/admin/login`
+  });
+
+  if (error) throw new Error(error.message);
+
+  // Ensure role is still set correctly
   await supabase.from("admin_roles").upsert({
     user_id: data.user.id,
     email,
@@ -36,23 +86,4 @@ export async function removeAdminUser(userId: string) {
   const supabase = createAdminClient();
   await supabase.from("admin_roles").delete().eq("user_id", userId);
   revalidatePath("/admin/users");
-}
-
-export async function listAdminUsers() {
-  const supabase = createAdminClient();
-  const { data: roles } = await supabase
-    .from("admin_roles")
-    .select("user_id, email, role, created_at")
-    .order("created_at");
-
-  // Also pull any authenticated users not yet in admin_roles
-  const { data: authUsers } = await supabase.auth.admin.listUsers();
-  const roleMap = new Map(roles?.map((r) => [r.user_id, r]) ?? []);
-
-  return (authUsers?.users ?? []).map((u) => ({
-    id: u.id,
-    email: u.email ?? "",
-    role: (roleMap.get(u.id)?.role as AdminRole) ?? "super_admin",
-    created_at: u.created_at
-  }));
 }
