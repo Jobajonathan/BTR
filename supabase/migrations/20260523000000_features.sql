@@ -19,7 +19,8 @@ CREATE POLICY "newsletter_public_insert"
   TO anon, authenticated
   WITH CHECK (true);
 
--- Admin read/delete
+-- Admin read/delete (service_role bypasses RLS automatically,
+-- but explicit policies make intent clear)
 CREATE POLICY "newsletter_admin_read"
   ON newsletter_subscribers FOR SELECT
   USING (auth.role() = 'service_role');
@@ -48,9 +49,12 @@ CREATE POLICY "partners_public_read"
   TO anon, authenticated
   USING (true);
 
+-- FOR ALL requires both USING (for SELECT/UPDATE/DELETE) and
+-- WITH CHECK (for INSERT/UPDATE)
 CREATE POLICY "partners_admin_write"
   ON partners FOR ALL
-  USING (auth.role() = 'service_role');
+  USING (auth.role() = 'service_role')
+  WITH CHECK (auth.role() = 'service_role');
 
 -- ── Activity log ───────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS activity_log (
@@ -71,6 +75,7 @@ CREATE POLICY "activity_admin_read"
   ON activity_log FOR SELECT
   USING (auth.role() = 'service_role');
 
+-- INSERT policies require WITH CHECK, not USING
 CREATE POLICY "activity_admin_insert"
   ON activity_log FOR INSERT
-  USING (auth.role() = 'service_role');
+  WITH CHECK (auth.role() = 'service_role');
