@@ -34,6 +34,7 @@ export default async function EditBlogPostPage({ params }: { params: Promise<{ i
             body: (post.body as { html?: string } | null)?.html ?? "",
             published_at: publishedAt,
             featured: post.featured ?? false,
+            show_in_resources: post.show_in_resources ?? false,
             seo_title: post.seo_title ?? "",
             seo_description: post.seo_description ?? ""
           }}

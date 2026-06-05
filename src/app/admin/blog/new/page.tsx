@@ -13,7 +13,7 @@ export default async function NewBlogPostPage() {
       <div className="admin-topbar"><h1>New Blog Post</h1></div>
       <div className="admin-content">
         <BlogForm
-          post={{ title: "", slug: "", excerpt: "", cover_image_url: "", author_id: "", category_id: "", body: "", published_at: "", featured: false, seo_title: "", seo_description: "" }}
+          post={{ title: "", slug: "", excerpt: "", cover_image_url: "", author_id: "", category_id: "", body: "", published_at: "", featured: false, show_in_resources: false, seo_title: "", seo_description: "" }}
           authors={authors ?? []}
           categories={categories ?? []}
         />

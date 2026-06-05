@@ -5,10 +5,24 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 export default async function ResourcesPage() {
   const supabase = createAdminClient();
-  const { data: resources } = await supabase
-    .from("resources")
-    .select("id, title, slug, excerpt, cover_image_url")
-    .order("created_at", { ascending: false });
+  const [{ data: resources }, { data: blogResources }] = await Promise.all([
+    supabase
+      .from("resources")
+      .select("id, title, slug, excerpt, cover_image_url")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("blog_posts")
+      .select("id, title, slug, excerpt, cover_image_url")
+      .eq("show_in_resources", true)
+      .not("published_at", "is", null)
+      .order("published_at", { ascending: false })
+  ]);
+
+  // Merge: resources first, then blog posts marked as resources
+  const allResources = [
+    ...(resources ?? []).map((r) => ({ ...r, type: "resource" as const })),
+    ...(blogResources ?? []).map((r) => ({ ...r, slug: `/blog/${r.slug}`, type: "blog" as const }))
+  ];
 
   return (
     <PageShell>
@@ -28,11 +42,11 @@ export default async function ResourcesPage() {
             Clear language, gentle direction.
           </h2>
 
-          {resources && resources.length > 0 ? (
+          {allResources.length > 0 ? (
             <div className="resources-listing-grid">
-              {resources.map((resource, i) => (
+              {allResources.map((resource, i) => (
                 <Link
-                  href={`/resources/${resource.slug}`}
+                  href={resource.type === "blog" ? resource.slug : `/resources/${resource.slug}`}
                   key={resource.id}
                   className="resource-listing-card"
                   style={{ "--accent": i % 3 === 0 ? "var(--rose)" : i % 3 === 1 ? "var(--green-soft)" : "#f1dca8" } as React.CSSProperties}
@@ -52,11 +66,11 @@ export default async function ResourcesPage() {
                   </div>
                   <div className="resource-listing-body">
                     <span className="tag" style={{ background: "var(--accent)", color: "var(--ink)", marginBottom: 14, fontSize: 11 }}>
-                      Resource
+                      {resource.type === "blog" ? "Article" : "Resource"}
                     </span>
                     <h3>{resource.title}</h3>
                     {resource.excerpt && <p>{resource.excerpt}</p>}
-                    <span className="resource-listing-cta">Read guide →</span>
+                    <span className="resource-listing-cta">Read →</span>
                   </div>
                 </Link>
               ))}

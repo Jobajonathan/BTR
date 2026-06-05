@@ -1,5 +1,63 @@
 /* Brand tokens are injected by layout.tsx from Supabase branding */
 
+/* ── Contact form fields ─────────────────────────────────────── */
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contact-field label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.contact-field input,
+.contact-field select,
+.contact-field textarea {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: var(--body-font, Inter, ui-sans-serif, system-ui, sans-serif);
+  padding: 12px 14px;
+  color: var(--ink);
+  background: var(--paper);
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.contact-field textarea {
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.contact-field input:focus,
+.contact-field select:focus,
+.contact-field textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 12%, transparent);
+}
+
+.alert {
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 12px 16px;
+}
+
+.alert-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+.alert-success {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
 * {
   box-sizing: border-box;
 }

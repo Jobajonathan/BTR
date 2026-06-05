@@ -23,6 +23,7 @@ type BlogPost = {
   body: string;
   published_at: string;
   featured: boolean;
+  show_in_resources: boolean;
   seo_title: string;
   seo_description: string;
 };
@@ -209,6 +210,15 @@ export default function BlogForm({
               onChange={(e) => set("featured", e.target.checked)}
             />
             <label htmlFor="featured">Feature on homepage</label>
+          </div>
+          <div className="checkbox-row">
+            <input
+              type="checkbox"
+              id="show_in_resources"
+              checked={form.show_in_resources}
+              onChange={(e) => set("show_in_resources", e.target.checked)}
+            />
+            <label htmlFor="show_in_resources">Show in Resources</label>
           </div>
         </div>
       </div>

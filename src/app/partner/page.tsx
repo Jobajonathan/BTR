@@ -32,9 +32,9 @@ export default async function PartnerPage() {
           initiatives. Together we make the conversations happen.
         </p>
         <div style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
-          <a href="mailto:info@behindthereels.com" className="button primary">
+          <Link href="/contact" className="button primary">
             Get in touch
-          </a>
+          </Link>
           <Link href="/join" className="button secondary">
             Join the community
           </Link>
@@ -183,13 +183,13 @@ export default async function PartnerPage() {
         <p style={{ fontSize: 18, color: "rgba(255,255,255,0.75)", margin: "0 auto 32px", maxWidth: 560 }}>
           Reach out and let&apos;s find the best way to work together.
         </p>
-        <a
-          href="mailto:info@behindthereels.com"
+        <Link
+          href="/contact"
           className="button"
           style={{ background: "#fff", color: "var(--green)", fontWeight: 800 }}
         >
-          Email us
-        </a>
+          Get in touch
+        </Link>
       </section>
     </PageShell>
   );

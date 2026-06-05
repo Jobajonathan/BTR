@@ -14,6 +14,7 @@ export async function saveBlogPost(data: {
   body: string;
   published_at: string;
   featured: boolean;
+  show_in_resources: boolean;
   seo_title: string;
   seo_description: string;
 }) {
@@ -28,6 +29,7 @@ export async function saveBlogPost(data: {
     body: data.body ? { html: data.body } : null,
     published_at: data.published_at || null,
     featured: data.featured,
+    show_in_resources: data.show_in_resources,
     seo_title: data.seo_title || null,
     seo_description: data.seo_description || null,
     updated_at: new Date().toISOString()
@@ -43,6 +45,7 @@ export async function saveBlogPost(data: {
 
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
+  revalidatePath("/resources");
   revalidatePath("/");
 }
 
