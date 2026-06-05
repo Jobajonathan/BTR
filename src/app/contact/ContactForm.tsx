@@ -8,6 +8,7 @@ const INQUIRY_TYPES = [
   "Corporate / NGO sponsorship",
   "Media / Content collaboration",
   "Community outreach",
+  "Speaking / Event invitation",
   "General enquiry",
 ];
 
@@ -29,7 +30,7 @@ export default function ContactForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.name || !form.email || !form.message) return;
+    if (!form.name || !form.email || !form.inquiry_type || !form.message) return;
     setStatus("sending");
     startTransition(async () => {
       const result = await submitContactForm(form);
@@ -56,57 +57,45 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       {status === "error" && (
         <div className="alert alert-error">{errorMsg || "Something went wrong. Please try again."}</div>
       )}
 
-      <div className="admin-grid-2" style={{ gap: 20 }}>
-        <div className="contact-field">
-          <label>Full name <span style={{ color: "var(--coral)" }}>*</span></label>
-          <input
-            type="text"
-            value={form.name}
-            onChange={(e) => set("name", e.target.value)}
-            placeholder="Your name"
-            required
-          />
-        </div>
-        <div className="contact-field">
-          <label>Email address <span style={{ color: "var(--coral)" }}>*</span></label>
-          <input
-            type="email"
-            value={form.email}
-            onChange={(e) => set("email", e.target.value)}
-            placeholder="you@example.com"
-            required
-          />
-        </div>
+      <div className="contact-field">
+        <label>Name <span style={{ color: "var(--coral)" }}>*</span></label>
+        <input
+          type="text"
+          value={form.name}
+          onChange={(e) => set("name", e.target.value)}
+          placeholder="Your full name"
+          required
+        />
       </div>
 
-      <div className="admin-grid-2" style={{ gap: 20 }}>
-        <div className="contact-field">
-          <label>Organisation <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
-          <input
-            type="text"
-            value={form.organisation}
-            onChange={(e) => set("organisation", e.target.value)}
-            placeholder="School, company, NGO…"
-          />
-        </div>
-        <div className="contact-field">
-          <label>Type of enquiry <span style={{ color: "var(--coral)" }}>*</span></label>
-          <select
-            value={form.inquiry_type}
-            onChange={(e) => set("inquiry_type", e.target.value)}
-            required
-          >
-            <option value="">Select one…</option>
-            {INQUIRY_TYPES.map((t) => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </select>
-        </div>
+      <div className="contact-field">
+        <label>Email address <span style={{ color: "var(--coral)" }}>*</span></label>
+        <input
+          type="email"
+          value={form.email}
+          onChange={(e) => set("email", e.target.value)}
+          placeholder="you@example.com"
+          required
+        />
+      </div>
+
+      <div className="contact-field">
+        <label>Why are you getting in touch? <span style={{ color: "var(--coral)" }}>*</span></label>
+        <select
+          value={form.inquiry_type}
+          onChange={(e) => set("inquiry_type", e.target.value)}
+          required
+        >
+          <option value="">Select one…</option>
+          {INQUIRY_TYPES.map((t) => (
+            <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
       </div>
 
       <div className="contact-field">

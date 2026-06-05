@@ -671,7 +671,7 @@ a {
   }
 
   .mobile-menu-btn {
-    display: flex;
+    display: flex !important;
   }
 
   .hero,
@@ -925,8 +925,10 @@ a {
 }
 
 /* ── Mobile hamburger button ─────────────────────────────────── */
+/* NOTE: default is hidden; the ≤980px media query below overrides to flex.
+   Keep this rule BEFORE the breakpoint so the media query wins the cascade. */
 .mobile-menu-btn {
-  display: none; /* shown only inside the ≤980px breakpoint above */
+  display: none;
   background: none;
   border: none;
   cursor: pointer;
