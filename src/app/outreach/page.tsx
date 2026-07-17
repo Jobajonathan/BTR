@@ -3,6 +3,8 @@ import Image from "next/image";
 import { PageShell } from "@/components/page-shell";
 import { createAdminClient } from "@/lib/supabase/admin";
 
+export const dynamic = "force-dynamic";
+
 export default async function OutreachPage() {
   const supabase = createAdminClient();
   const { data: items } = await supabase

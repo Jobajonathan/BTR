@@ -30,16 +30,41 @@ export async function saveSettings(data: {
   linkedin_url: string;
   footer_tagline: string;
   homepage_sections: HomepageSection[];
+  header_cta_label: string;
+  header_cta_url: string;
+  volunteer_headline: string;
+  volunteer_copy: string;
+  donate_headline: string;
+  donate_copy: string;
+  donate_amounts: string;
+  donate_bank_name: string;
+  donate_account_name: string;
+  donate_account_number: string;
+  donate_sort_code: string;
+  donate_payment_link: string;
 }) {
   const supabase = createAdminClient();
 
+  // Parse donate_amounts from comma-separated string to JSON array
+  const donate_amounts_parsed = data.donate_amounts
+    .split(",")
+    .map((s) => parseFloat(s.trim()))
+    .filter((n) => !isNaN(n));
+
   const { error } = await supabase
     .from("site_settings")
-    .upsert({ id: SETTINGS_ID, ...data, updated_at: new Date().toISOString() });
+    .upsert({
+      id: SETTINGS_ID,
+      ...data,
+      donate_amounts: donate_amounts_parsed.length ? donate_amounts_parsed : [5, 10, 25, 50],
+      updated_at: new Date().toISOString()
+    });
 
   if (error) throw new Error(error.message);
 
   revalidatePath("/", "layout");
   revalidatePath("/join");
+  revalidatePath("/volunteer");
+  revalidatePath("/donate");
   revalidatePath("/admin/settings");
 }

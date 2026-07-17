@@ -40,23 +40,26 @@ const ALL_NAV: NavGroup[] = [
   {
     label: "Community",
     items: [
-      { href: "/admin/newsletter", label: "Newsletter",           icon: "◍", section: "newsletter" },
-      { href: "/admin/partners",   label: "Partners",             icon: "◇", section: "partners" }
+      { href: "/admin/newsletter",       label: "Newsletter",         icon: "◍", section: "newsletter" },
+      { href: "/admin/partners",         label: "Partners",           icon: "◇", section: "partners" },
+      { href: "/admin/volunteers",       label: "Volunteers",         icon: "◈", section: "volunteers" },
+      { href: "/admin/contact-messages", label: "Contact Messages",   icon: "✉", section: "contact_messages" }
     ]
   },
   {
     label: "People",
     items: [
-      { href: "/admin/users",      label: "Admin Users",          icon: "◍", section: "users" }
+      { href: "/admin/users",            label: "Admin Users",        icon: "◍", section: "users" }
     ]
   },
   {
     label: "Site",
     items: [
-      { href: "/admin/settings",   label: "Site Settings",        icon: "◧", section: "settings" },
-      { href: "/admin/branding",   label: "Branding & Fonts",     icon: "◑", section: "branding" },
-      { href: "/admin/media",      label: "Media Library",        icon: "◰", section: "media" },
-      { href: "/admin/activity",   label: "Activity Log",         icon: "◴", section: "activity" }
+      { href: "/admin/settings",         label: "Site Settings",      icon: "◧", section: "settings" },
+      { href: "/admin/branding",         label: "Branding & Fonts",   icon: "◑", section: "branding" },
+      { href: "/admin/media",            label: "Media Library",      icon: "◰", section: "media" },
+      { href: "/admin/sitemap",          label: "Sitemap",            icon: "◻", section: "sitemap" },
+      { href: "/admin/activity",         label: "Activity Log",       icon: "◴", section: "activity" }
     ]
   }
 ];

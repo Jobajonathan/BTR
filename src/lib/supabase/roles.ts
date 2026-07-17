@@ -14,14 +14,16 @@ export const ROLE_PERMISSIONS: Record<AdminRole, string[]> = {
   super_admin: [
     "dashboard", "stories", "blog", "dialogues", "outreach", "resources",
     "authors", "team", "submissions", "users", "settings", "branding",
-    "newsletter", "partners", "media", "activity"
+    "newsletter", "partners", "media", "activity",
+    "volunteers", "contact_messages", "sitemap"
   ],
   editor: [
     "dashboard", "stories", "blog", "dialogues", "outreach", "resources",
-    "authors", "team", "submissions", "newsletter", "partners", "media"
+    "authors", "team", "submissions", "newsletter", "partners", "media",
+    "volunteers", "contact_messages"
   ],
   author: ["dashboard", "blog", "media"],
-  moderator: ["dashboard", "submissions"]
+  moderator: ["dashboard", "submissions", "contact_messages"]
 };
 
 export async function getUserRole(userId: string): Promise<AdminRole> {

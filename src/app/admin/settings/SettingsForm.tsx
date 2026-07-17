@@ -23,6 +23,21 @@ type Settings = {
   linkedin_url: string;
   footer_tagline: string;
   homepage_sections: HomepageSection[];
+  // Header CTA
+  header_cta_label: string;
+  header_cta_url: string;
+  // Volunteer page
+  volunteer_headline: string;
+  volunteer_copy: string;
+  // Donate page
+  donate_headline: string;
+  donate_copy: string;
+  donate_amounts: string;
+  donate_bank_name: string;
+  donate_account_name: string;
+  donate_account_number: string;
+  donate_sort_code: string;
+  donate_payment_link: string;
 };
 
 const DEFAULT_SECTIONS: HomepageSection[] = [
@@ -248,6 +263,84 @@ export default function SettingsForm({ data }: { data: Settings }) {
         <div className="admin-field">
           <label>Footer tagline</label>
           <input type="text" value={form.footer_tagline} onChange={(e) => set("footer_tagline", e.target.value)} />
+        </div>
+      </div>
+
+      {/* Header CTA */}
+      <div className="admin-card">
+        <p className="admin-card-title">Header Call-to-Action Button</p>
+        <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 16 }}>
+          The button that appears in the top-right of the header navigation on every page.
+        </p>
+        <div className="admin-grid-2">
+          <div className="admin-field">
+            <label>Button label</label>
+            <input type="text" value={form.header_cta_label} onChange={(e) => set("header_cta_label", e.target.value)} placeholder="e.g. Donate" />
+          </div>
+          <div className="admin-field">
+            <label>Button URL</label>
+            <input type="text" value={form.header_cta_url} onChange={(e) => set("header_cta_url", e.target.value)} placeholder="e.g. /donate" />
+          </div>
+        </div>
+      </div>
+
+      {/* Volunteer page */}
+      <div className="admin-card">
+        <p className="admin-card-title">Volunteer Page</p>
+        <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 16 }}>
+          Edit the hero headline and copy on the <strong>/volunteer</strong> page.
+        </p>
+        <div className="admin-field">
+          <label>Headline</label>
+          <input type="text" value={form.volunteer_headline} onChange={(e) => set("volunteer_headline", e.target.value)} placeholder="e.g. Join the movement." />
+        </div>
+        <div className="admin-field">
+          <label>Supporting copy</label>
+          <textarea value={form.volunteer_copy} onChange={(e) => set("volunteer_copy", e.target.value)} rows={3} placeholder="Describe what volunteers do and who you're looking for…" />
+        </div>
+      </div>
+
+      {/* Donate page */}
+      <div className="admin-card">
+        <p className="admin-card-title">Donate Page</p>
+        <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 16 }}>
+          Edit the hero, suggested amounts, and payment details on the <strong>/donate</strong> page.
+        </p>
+        <div className="admin-field">
+          <label>Headline</label>
+          <input type="text" value={form.donate_headline} onChange={(e) => set("donate_headline", e.target.value)} placeholder="e.g. Support the movement." />
+        </div>
+        <div className="admin-field">
+          <label>Supporting copy</label>
+          <textarea value={form.donate_copy} onChange={(e) => set("donate_copy", e.target.value)} rows={3} placeholder="Tell donors what their gift funds…" />
+        </div>
+        <div className="admin-field">
+          <label>Suggested donation amounts</label>
+          <input type="text" value={form.donate_amounts} onChange={(e) => set("donate_amounts", e.target.value)} placeholder="e.g. 5, 10, 25, 50" />
+          <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>Comma-separated numbers. Use currency symbol on the page itself.</p>
+        </div>
+        <div className="admin-field">
+          <label>Payment link (e.g. PayPal, Stripe, Flutterwave)</label>
+          <input type="url" value={form.donate_payment_link} onChange={(e) => set("donate_payment_link", e.target.value)} placeholder="https://paystack.com/pay/..." />
+        </div>
+        <p style={{ fontWeight: 600, fontSize: 13, marginTop: 8, marginBottom: 12 }}>Bank transfer details</p>
+        <div className="admin-grid-2">
+          <div className="admin-field">
+            <label>Bank name</label>
+            <input type="text" value={form.donate_bank_name} onChange={(e) => set("donate_bank_name", e.target.value)} placeholder="e.g. Zenith Bank" />
+          </div>
+          <div className="admin-field">
+            <label>Account name</label>
+            <input type="text" value={form.donate_account_name} onChange={(e) => set("donate_account_name", e.target.value)} placeholder="e.g. Behind the Reels Initiative" />
+          </div>
+          <div className="admin-field">
+            <label>Account number</label>
+            <input type="text" value={form.donate_account_number} onChange={(e) => set("donate_account_number", e.target.value)} placeholder="1234567890" />
+          </div>
+          <div className="admin-field">
+            <label>Sort code / routing number</label>
+            <input type="text" value={form.donate_sort_code} onChange={(e) => set("donate_sort_code", e.target.value)} placeholder="Optional" />
+          </div>
         </div>
       </div>
 

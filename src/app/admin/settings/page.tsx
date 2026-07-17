@@ -63,7 +63,19 @@ export default async function SettingsPage() {
     homepage_sections:
       Array.isArray(data?.homepage_sections) && data.homepage_sections.length
         ? data.homepage_sections
-        : DEFAULT_SECTIONS
+        : DEFAULT_SECTIONS,
+    header_cta_label: data?.header_cta_label ?? "Donate",
+    header_cta_url: data?.header_cta_url ?? "/donate",
+    volunteer_headline: data?.volunteer_headline ?? "",
+    volunteer_copy: data?.volunteer_copy ?? "",
+    donate_headline: data?.donate_headline ?? "",
+    donate_copy: data?.donate_copy ?? "",
+    donate_amounts: Array.isArray(data?.donate_amounts) ? data.donate_amounts.join(", ") : "5, 10, 25, 50",
+    donate_bank_name: data?.donate_bank_name ?? "",
+    donate_account_name: data?.donate_account_name ?? "",
+    donate_account_number: data?.donate_account_number ?? "",
+    donate_sort_code: data?.donate_sort_code ?? "",
+    donate_payment_link: data?.donate_payment_link ?? "",
   };
 
   return (

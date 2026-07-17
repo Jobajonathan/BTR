@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { navItems } from "@/lib/content";
-import { getBranding } from "@/lib/supabase/cache";
+import { getBranding, getSiteSettings } from "@/lib/supabase/cache";
 import { MobileNav } from "@/components/mobile-nav";
 
 export async function SiteHeader() {
-  const branding = await getBranding();
+  const [branding, settings] = await Promise.all([getBranding(), getSiteSettings()]);
   const logoUrl = branding?.logo_url ?? "/images/btr-logo.jpg";
+  const ctaLabel = (settings as Record<string, unknown> | null)?.header_cta_label as string ?? "Donate";
+  const ctaUrl = (settings as Record<string, unknown> | null)?.header_cta_url as string ?? "/donate";
 
   return (
     <header className="site-header">
@@ -28,8 +30,8 @@ export async function SiteHeader() {
           </Link>
         ))}
       </nav>
-      <Link className="button primary header-cta" href="/donate">
-        Donate
+      <Link className="button primary header-cta" href={ctaUrl}>
+        {ctaLabel}
       </Link>
       {/* Mobile hamburger + drawer */}
       <MobileNav />
