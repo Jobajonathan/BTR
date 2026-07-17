@@ -39,6 +39,7 @@ export async function saveOutreach(data: {
     if (error) throw new Error(error.message);
   }
   revalidatePath("/admin/outreach");
+  revalidatePath("/outreach");
 }
 
 export async function deleteOutreach(id: string) {
@@ -46,6 +47,7 @@ export async function deleteOutreach(id: string) {
   const { error } = await supabase.from("outreaches").delete().eq("id", id);
   if (error) throw new Error(error.message);
   revalidatePath("/admin/outreach");
+  revalidatePath("/outreach");
 }
 
 export { uploadMedia };

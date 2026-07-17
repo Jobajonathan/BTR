@@ -54,11 +54,11 @@ export function MobileNav() {
             </div>
             <Link
               className="button primary"
-              href="/join"
+              href="/donate"
               style={{ width: "100%", textAlign: "center" }}
               onClick={() => setOpen(false)}
             >
-              Join the Community
+              Donate
             </Link>
           </nav>
         </div>

@@ -28,8 +28,8 @@ export async function SiteHeader() {
           </Link>
         ))}
       </nav>
-      <Link className="button primary header-cta" href="/join">
-        Join the Community
+      <Link className="button primary header-cta" href="/donate">
+        Donate
       </Link>
       {/* Mobile hamburger + drawer */}
       <MobileNav />
