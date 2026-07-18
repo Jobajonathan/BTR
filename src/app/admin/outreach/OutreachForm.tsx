@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { saveOutreach, deleteOutreach, uploadMedia } from "./actions";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 type Stat = { value: string; label: string };
 
@@ -14,11 +15,13 @@ type Outreach = {
   location: string;
   date: string;
   summary: string;
+  cover_image_url: string;
   gallery: string[];
   impact_stats: Stat[];
   partners: string[];
   testimonial: string;
   testimonial_author: string;
+  status: "draft" | "published";
 };
 
 function toSlug(s: string) {
@@ -52,11 +55,13 @@ export default function OutreachForm({ outreach }: { outreach: Outreach }) {
     finally { setUploading(false); e.target.value = ""; }
   }
 
-  function handleSave() {
+  function handleSave(publishStatus?: "draft" | "published") {
+    const saveForm = publishStatus ? { ...form, status: publishStatus } : form;
+    if (publishStatus) setForm(saveForm);
     setStatus("idle");
     startTransition(async () => {
       try {
-        await saveOutreach(form);
+        await saveOutreach(saveForm);
         setStatus("saved");
         setTimeout(() => setStatus("idle"), 3000);
         if (!form.id) router.push("/admin/outreach");
@@ -72,10 +77,12 @@ export default function OutreachForm({ outreach }: { outreach: Outreach }) {
     });
   }
 
+  const isPublished = form.status === "published";
+
   return (
     <>
       <Link href="/admin/outreach" className="back-link">← Back to Outreaches</Link>
-      {status === "saved" && <div className="alert alert-success">Saved.</div>}
+      {status === "saved" && <div className="alert alert-success">{isPublished ? "Published and live." : "Draft saved."}</div>}
       {status === "error" && <div className="alert alert-error">Save failed.</div>}
 
       <div className="admin-card">
@@ -110,6 +117,16 @@ export default function OutreachForm({ outreach }: { outreach: Outreach }) {
             <input type="date" value={form.date} onChange={(e) => set("date", e.target.value)} />
           </div>
         </div>
+      </div>
+
+      <div className="admin-card">
+        <p className="admin-card-title">Cover Image</p>
+        <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 12 }}>Shown on the outreach listing page. If blank, the first gallery photo is used.</p>
+        <ImageUpload
+          value={form.cover_image_url}
+          onChange={(url) => set("cover_image_url", url)}
+          previewHeight={180}
+        />
       </div>
 
       <div className="admin-card">
@@ -168,8 +185,40 @@ export default function OutreachForm({ outreach }: { outreach: Outreach }) {
         </div>
       </div>
 
+      {/* Publish panel */}
+      <div className="admin-card publish-panel">
+        <p className="admin-card-title">Publish</p>
+        <div className="publish-toggle">
+          <button
+            type="button"
+            className={`publish-btn${!isPublished ? " active" : ""}`}
+            onClick={() => set("status", "draft")}
+          >
+            Save as draft
+          </button>
+          <button
+            type="button"
+            className={`publish-btn publish-btn-green${isPublished ? " active" : ""}`}
+            onClick={() => set("status", "published")}
+          >
+            Publish
+          </button>
+        </div>
+        <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 10 }}>
+          {isPublished
+            ? "This outreach is live on the website."
+            : "This outreach is a draft and will not appear on the website."}
+        </p>
+      </div>
+
       <div className="form-actions">
-        <button className="btn-primary" onClick={handleSave} disabled={isPending || uploading}>{isPending ? "Saving…" : "Save outreach"}</button>
+        <button
+          className="btn-primary"
+          onClick={() => handleSave()}
+          disabled={isPending || uploading}
+        >
+          {isPending ? "Saving…" : isPublished ? "Save & publish" : "Save draft"}
+        </button>
         {form.id && <button className="btn-danger" onClick={handleDelete} disabled={isPending}>Delete</button>}
       </div>
     </>

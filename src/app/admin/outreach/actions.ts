@@ -11,11 +11,13 @@ export async function saveOutreach(data: {
   location: string;
   date: string;
   summary: string;
+  cover_image_url: string;
   gallery: string[];
   impact_stats: Array<{ value: string; label: string }>;
   partners: string[];
   testimonial: string;
   testimonial_author: string;
+  status: "draft" | "published";
 }) {
   const supabase = createAdminClient();
   const payload = {
@@ -24,11 +26,13 @@ export async function saveOutreach(data: {
     location: data.location || null,
     date: data.date || null,
     summary: data.summary || null,
+    cover_image_url: data.cover_image_url || null,
     gallery: data.gallery.filter(Boolean),
     impact_stats: data.impact_stats.filter((s) => s.value),
     partners: data.partners.filter(Boolean),
     testimonial: data.testimonial || null,
-    testimonial_author: data.testimonial_author || null
+    testimonial_author: data.testimonial_author || null,
+    status: data.status
   };
 
   if (data.id) {

@@ -1,19 +1,33 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import "../admin.css";
 
 type Mode = "login" | "forgot" | "forgot-sent";
 
-export default function LoginPage() {
+function LoginInner() {
   const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const params = useSearchParams();
+
+  // Detect Supabase auth errors redirected to this page (e.g. expired OTP)
+  useEffect(() => {
+    const errorCode = params.get("error_code");
+    const errorDesc = params.get("error_description");
+    if (errorCode === "otp_expired" || errorCode === "access_denied") {
+      setMsg(
+        errorDesc
+          ? decodeURIComponent(errorDesc).replace(/\+/g, " ")
+          : "That link has expired. Please request a new one below."
+      );
+    }
+  }, [params]);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -56,6 +70,9 @@ export default function LoginPage() {
           </div>
           <h1>Check your email</h1>
           <p>We sent a password reset link to <strong>{email}</strong>. Click the link in the email to set a new password.</p>
+          <p style={{ fontSize: 13, color: "var(--muted)", marginTop: 8 }}>
+            The link expires in 1 hour. If it expires, come back here and request a new one.
+          </p>
           <button
             style={{ marginTop: 24, width: "100%" }}
             onClick={() => { setMode("login"); setMsg(""); }}
@@ -114,7 +131,22 @@ export default function LoginPage() {
         <h1>Sign in</h1>
         <p>Behind the Reels content management</p>
         <form onSubmit={handleLogin}>
-          {msg && <div className="alert alert-error">{msg}</div>}
+          {msg && (
+            <div className="alert alert-error">
+              {msg}
+              {(params.get("error_code") === "otp_expired" || params.get("error_code") === "access_denied") && (
+                <div style={{ marginTop: 8 }}>
+                  <button
+                    type="button"
+                    onClick={() => { setMode("forgot"); setMsg(""); }}
+                    style={{ fontSize: 13, color: "var(--green)", background: "none", border: "none", cursor: "pointer", padding: 0, textDecoration: "underline" }}
+                  >
+                    Request a new link →
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
           <label>Email</label>
           <input
             type="email"
@@ -145,5 +177,13 @@ export default function LoginPage() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginInner />
+    </Suspense>
   );
 }

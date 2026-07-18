@@ -12,15 +12,15 @@ export const ROLE_LABELS: Record<AdminRole, string> = {
 /** Permissions per role — what nav sections each role can access */
 export const ROLE_PERMISSIONS: Record<AdminRole, string[]> = {
   super_admin: [
-    "dashboard", "stories", "blog", "dialogues", "outreach", "resources",
-    "authors", "team", "submissions", "users", "settings", "branding",
-    "newsletter", "partners", "media", "activity",
-    "volunteers", "contact_messages", "sitemap"
+    "dashboard", "stories", "blog", "projects", "dialogues", "outreach", "resources",
+    "shop", "authors", "team", "submissions", "users", "settings", "pages",
+    "branding", "newsletter", "partners", "media", "activity",
+    "volunteers", "pledges", "contact_messages", "sitemap"
   ],
   editor: [
-    "dashboard", "stories", "blog", "dialogues", "outreach", "resources",
-    "authors", "team", "submissions", "newsletter", "partners", "media",
-    "volunteers", "contact_messages"
+    "dashboard", "stories", "blog", "projects", "dialogues", "outreach", "resources",
+    "shop", "authors", "team", "submissions", "newsletter", "partners", "media",
+    "volunteers", "pledges", "contact_messages"
   ],
   author: ["dashboard", "blog", "media"],
   moderator: ["dashboard", "submissions", "contact_messages"]

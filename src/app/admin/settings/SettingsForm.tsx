@@ -44,7 +44,8 @@ const DEFAULT_SECTIONS: HomepageSection[] = [
   { id: "stories",   label: "Stories",   visible: true, order: 1 },
   { id: "dialogues", label: "Dialogues", visible: true, order: 2 },
   { id: "outreach",  label: "Outreach",  visible: true, order: 3 },
-  { id: "resources", label: "Resources", visible: true, order: 4 }
+  { id: "resources", label: "Resources", visible: true, order: 4 },
+  { id: "projects",  label: "Projects",  visible: true, order: 5 }
 ];
 
 function mergeSections(stored: HomepageSection[]): HomepageSection[] {

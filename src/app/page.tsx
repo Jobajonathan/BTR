@@ -15,7 +15,8 @@ const DEFAULT_SECTIONS = [
   { id: "stories",   visible: true, order: 1 },
   { id: "dialogues", visible: true, order: 2 },
   { id: "outreach",  visible: true, order: 3 },
-  { id: "resources", visible: true, order: 4 }
+  { id: "resources", visible: true, order: 4 },
+  { id: "projects",  visible: true, order: 5 }
 ];
 
 export default async function Home() {
@@ -25,7 +26,8 @@ export default async function Home() {
     { data: settings },
     { data: featuredStories },
     { data: latestDialogue },
-    { data: resources }
+    { data: resources },
+    { data: projects }
   ] = await Promise.all([
     supabase.from("site_settings").select("*").eq("id", "00000000-0000-0000-0000-000000000001").single(),
     supabase
@@ -41,7 +43,13 @@ export default async function Home() {
       .order("date", { ascending: false })
       .limit(1)
       .maybeSingle(),
-    supabase.from("resources").select("id, title, excerpt, slug").limit(4)
+    supabase.from("resources").select("id, title, excerpt, slug").limit(4),
+    supabase
+      .from("projects")
+      .select("id, title, slug, description, cover_image_url")
+      .eq("status", "published")
+      .order("order_index", { ascending: true })
+      .limit(4)
   ]);
 
   const heroHeadline = settings?.hero_headline ?? "Behind every reel is a real story.";
@@ -171,11 +179,38 @@ export default async function Home() {
     </section>
   );
 
+  const projectsSection = projects && projects.length > 0 ? (
+    <section key="projects" className="section" style={{ background: "var(--cream)" }}>
+      <SectionIntro
+        kicker="Projects"
+        title="Our ongoing work."
+        body="Long-term initiatives, series, and campaigns that go beyond individual posts."
+      />
+      <div className="card-grid">
+        {projects.map((project, index) => (
+          <ContentCard
+            accent={(index % 3) + 1}
+            excerpt={project.description ?? undefined}
+            href={project.slug ? `/projects/${project.slug}` : "/projects"}
+            image={project.cover_image_url ?? undefined}
+            key={project.id}
+            tag="Project"
+            title={project.title}
+          />
+        ))}
+      </div>
+      <div style={{ textAlign: "center", marginTop: 32 }}>
+        <Link className="button secondary" href="/projects">View all projects</Link>
+      </div>
+    </section>
+  ) : null;
+
   const sectionMap: Record<string, React.ReactNode> = {
     stories: storiesSection,
     dialogues: dialoguesSection,
     outreach: outreachSection,
-    resources: resourcesSection
+    resources: resourcesSection,
+    projects: projectsSection
   };
 
   return (

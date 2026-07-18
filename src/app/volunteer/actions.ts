@@ -12,7 +12,9 @@ export async function submitVolunteerForm(data: {
   skills: string;
   availability: string;
   motivation: string;
+  honeypot?: string;
 }): Promise<VolunteerResult> {
+  if (data.honeypot) return {};
   const supabase = createAdminClient();
   const { error } = await supabase.from("volunteer_submissions").insert({
     name: data.name,

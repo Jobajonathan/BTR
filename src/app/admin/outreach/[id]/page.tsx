@@ -19,11 +19,13 @@ export default async function EditOutreachPage({ params }: { params: Promise<{ i
           location: data.location ?? "",
           date: data.date ?? "",
           summary: data.summary ?? "",
+          cover_image_url: data.cover_image_url ?? "",
           gallery: data.gallery ?? [],
           impact_stats: data.impact_stats ?? [],
           partners: data.partners ?? [],
           testimonial: data.testimonial ?? "",
-          testimonial_author: data.testimonial_author ?? ""
+          testimonial_author: data.testimonial_author ?? "",
+          status: (data.status as "draft" | "published") ?? "published"
         }} />
       </div>
     </>

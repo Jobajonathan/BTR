@@ -37,6 +37,8 @@ export async function SiteFooter() {
       <nav aria-label="Community links">
         <Link href="/submit">Submit your story</Link>
         <Link href="/partner">Partner with us</Link>
+        <Link href="/projects">Projects</Link>
+        <Link href="/shop">Shop</Link>
         <Link href="/join">Community</Link>
         <Link href="/volunteer">Volunteer</Link>
         <Link href="/donate">Donate</Link>

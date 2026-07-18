@@ -14,7 +14,7 @@ const AVAILABILITY_OPTIONS = [
 export default function VolunteerForm() {
   const [form, setForm] = useState({
     name: "", email: "", phone: "", city: "",
-    skills: "", availability: "", motivation: "",
+    skills: "", availability: "", motivation: "", honeypot: "",
   });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -49,6 +49,7 @@ export default function VolunteerForm() {
 
   return (
     <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <input type="text" name="website" value={form.honeypot} onChange={(e) => set("honeypot", e.target.value)} style={{ display: "none" }} tabIndex={-1} autoComplete="off" />
       {status === "error" && (
         <div className="alert alert-error">{errorMsg || "Something went wrong. Please try again."}</div>
       )}

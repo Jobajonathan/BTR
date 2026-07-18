@@ -19,6 +19,7 @@ export default function ContactForm() {
     organisation: "",
     inquiry_type: "",
     message: "",
+    honeypot: "",
   });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -58,6 +59,8 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      {/* Honeypot — hidden from real users, bots fill it */}
+      <input type="text" name="website" value={form.honeypot} onChange={(e) => set("honeypot", e.target.value)} style={{ display: "none" }} tabIndex={-1} autoComplete="off" />
       {status === "error" && (
         <div className="alert alert-error">{errorMsg || "Something went wrong. Please try again."}</div>
       )}

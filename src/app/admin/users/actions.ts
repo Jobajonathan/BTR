@@ -16,7 +16,7 @@ export type AdminUser = {
 
 export type ActionResult = { error?: string };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://btr.theryters.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.behindthereels.com";
 
 export async function listAdminUsers(): Promise<AdminUser[]> {
   const supabase = createAdminClient();
@@ -43,7 +43,7 @@ export async function inviteAdminUser(email: string, role: AdminRole): Promise<A
   const supabase = createAdminClient();
 
   const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
-    redirectTo: `${SITE_URL}/admin/login`
+    redirectTo: `${SITE_URL}/admin/reset-password`
   });
 
   // "User already registered" — their Auth record exists but has no admin role.
@@ -65,7 +65,7 @@ export async function inviteAdminUser(email: string, role: AdminRole): Promise<A
       await supabase.auth.admin.generateLink({
         type: "recovery",
         email,
-        options: { redirectTo: `${SITE_URL}/admin/login` }
+        options: { redirectTo: `${SITE_URL}/admin/reset-password` }
       });
 
       revalidatePath("/admin/users");
@@ -90,7 +90,7 @@ export async function resendInvitation(email: string, role: AdminRole): Promise<
   const supabase = createAdminClient();
 
   const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
-    redirectTo: `${SITE_URL}/admin/login`
+    redirectTo: `${SITE_URL}/admin/reset-password`
   });
 
   if (error) return { error: error.message };

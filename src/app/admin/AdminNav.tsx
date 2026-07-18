@@ -21,7 +21,7 @@ const ALL_NAV: NavGroup[] = [
   {
     label: "Overview",
     items: [
-      { href: "/admin", label: "Dashboard", icon: "⊞", section: "dashboard" }
+      { href: "/admin",            label: "Dashboard",            icon: "⊞", section: "dashboard" }
     ]
   },
   {
@@ -29,9 +29,11 @@ const ALL_NAV: NavGroup[] = [
     items: [
       { href: "/admin/stories",    label: "Stories",              icon: "✦", section: "stories" },
       { href: "/admin/blog",       label: "Blog",                 icon: "✍", section: "blog" },
+      { href: "/admin/projects",   label: "Projects",             icon: "◆", section: "projects" },
       { href: "/admin/dialogues",  label: "Dialogues",            icon: "◎", section: "dialogues" },
       { href: "/admin/outreach",   label: "Outreaches",           icon: "◈", section: "outreach" },
       { href: "/admin/resources",  label: "Resources",            icon: "▣", section: "resources" },
+      { href: "/admin/shop",       label: "Shop & Merch",         icon: "◉", section: "shop" },
       { href: "/admin/authors",    label: "Authors & Categories", icon: "◉", section: "authors" },
       { href: "/admin/team",       label: "Team Members",         icon: "◐", section: "team" },
       { href: "/admin/submissions",label: "Submissions",          icon: "✉", section: "submissions" }
@@ -43,6 +45,7 @@ const ALL_NAV: NavGroup[] = [
       { href: "/admin/newsletter",       label: "Newsletter",         icon: "◍", section: "newsletter" },
       { href: "/admin/partners",         label: "Partners",           icon: "◇", section: "partners" },
       { href: "/admin/volunteers",       label: "Volunteers",         icon: "◈", section: "volunteers" },
+      { href: "/admin/pledges",          label: "Donation Pledges",   icon: "◇", section: "pledges" },
       { href: "/admin/contact-messages", label: "Contact Messages",   icon: "✉", section: "contact_messages" }
     ]
   },
@@ -56,6 +59,7 @@ const ALL_NAV: NavGroup[] = [
     label: "Site",
     items: [
       { href: "/admin/settings",         label: "Site Settings",      icon: "◧", section: "settings" },
+      { href: "/admin/pages",            label: "Custom Pages",       icon: "◻", section: "pages" },
       { href: "/admin/branding",         label: "Branding & Fonts",   icon: "◑", section: "branding" },
       { href: "/admin/media",            label: "Media Library",      icon: "◰", section: "media" },
       { href: "/admin/sitemap",          label: "Sitemap",            icon: "◻", section: "sitemap" },

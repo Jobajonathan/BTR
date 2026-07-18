@@ -10,6 +10,7 @@ export default async function OutreachPage() {
   const { data: items } = await supabase
     .from("outreaches")
     .select("id, title, slug, location, date, summary, cover_image_url, impact_stats")
+    .eq("status", "published")
     .order("date", { ascending: false });
 
   return (

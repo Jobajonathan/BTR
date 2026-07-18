@@ -10,7 +10,11 @@ export async function submitContactForm(data: {
   organisation: string;
   inquiry_type: string;
   message: string;
+  honeypot?: string;
 }): Promise<ContactResult> {
+  // Honeypot: bots fill hidden fields, humans don't
+  if (data.honeypot) return {};
+
   const supabase = createAdminClient();
 
   const { error } = await supabase.from("contact_messages").insert({
